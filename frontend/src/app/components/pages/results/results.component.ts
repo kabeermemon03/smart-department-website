@@ -37,8 +37,9 @@ interface Result {
             <label for="course">Filter by Course:</label>
             <select id="course" [(ngModel)]="selectedCourse" name="course" (change)="filterResults()">
               <option value="">All Courses</option>
-              <option value="Computer Science">Computer Science</option>
-              <option value="Information Technology">Information Technology</option>
+              <option value="Electronics Engineering">Electronics Engineering</option>
+              <option value="Computer Engineering">Computer Engineering</option>
+              <option value="Electrical Engineering">Electrical Engineering</option>
             </select>
           </div>
         </div>
@@ -152,13 +153,40 @@ export class ResultsComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
+    this.loadStaticResults();
+    this.loadUploadedResults();
+  }
+
+  loadStaticResults() {
     this.http.get<Result[]>('assets/data/results.json').subscribe({
       next: (data) => {
         this.results = data;
-        this.filteredResults = data;
+        this.combineResults();
       },
       error: (err) => console.error('Error loading results data:', err)
     });
+  }
+
+  loadUploadedResults() {
+    const saved = localStorage.getItem('uploadedResults');
+    if (saved) {
+      const uploadedResults = JSON.parse(saved);
+      uploadedResults.forEach((uploaded: any) => {
+        this.results.push({
+          id: uploaded.id,
+          title: uploaded.title,
+          semester: uploaded.semester,
+          course: uploaded.course,
+          date: uploaded.uploadDate,
+          pdfUrl: uploaded.fileUrl || '#'
+        });
+      });
+      this.combineResults();
+    }
+  }
+
+  combineResults() {
+    this.filteredResults = [...this.results];
   }
 
   filterResults() {

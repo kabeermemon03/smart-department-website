@@ -1,0 +1,62 @@
+<section class="hero">
+  <div class="processor-background">
+    <!-- Main Processor Chip -->
+    <div class="processor-chip">
+      <div class="chip-core"></div>
+      <div class="chip-pins">
+        <div class="pin" *ngFor="let i of [1,2,3,4,5,6,7,8]"></div>
+      </div>
+    </div>
+    
+    <!-- Circuit Board Traces -->
+    <div class="circuit-traces">
+      <div class="trace trace-1"></div>
+      <div class="trace trace-2"></div>
+      <div class="trace trace-3"></div>
+      <div class="trace trace-4"></div>
+      <div class="trace trace-5"></div>
+      <div class="trace trace-6"></div>
+    </div>
+    
+    <!-- Electronic Components -->
+    <div class="components">
+      <div class="resistor resistor-1"></div>
+      <div class="resistor resistor-2"></div>
+      <div class="capacitor capacitor-1"></div>
+      <div class="capacitor capacitor-2"></div>
+      <div class="ic ic-1"></div>
+      <div class="ic ic-2"></div>
+    </div>
+    
+    <!-- Data Flow Lines -->
+    <div class="data-flow">
+      <div class="data-line" *ngFor="let i of [1,2,3,4,5]"></div>
+    </div>
+  </div>
+  
+  <div class="pcb-grid"></div>
+  
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="university-link">
+        <a href="https://muet.edu.pk" target="_blank" class="muet-box">
+          <span class="university-name">Mehran University of Engineering and Technology</span>
+        </a>
+      </div>
+      <h1 class="hero-title">Electronics Engineering Department</h1>
+      <p class="hero-subtitle">{{ subtitle }}</p>
+      <div class="hero-buttons">
+        <button class="btn-primary">Explore Programs</button>
+        <button class="btn-secondary">Contact Us</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="scroll-indicator">
+    <div class="mouse">
+      <div class="wheel"></div>
+    </div>
+    <p>Scroll to explore</p>
+  </div>
+</section>

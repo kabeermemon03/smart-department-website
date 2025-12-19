@@ -1,0 +1,46 @@
+<div class="developers-page">
+  <div class="hero-section">
+    <div class="container">
+      <h1>Meet Our Developer Team</h1>
+      <p>The talented individuals behind this website</p>
+    </div>
+  </div>
+  
+  <div class="developers-section">
+    <div class="container">
+      <div class="developers-grid">
+        <div class="developer-card" *ngFor="let dev of developers">
+          <div class="card-header">
+            <div class="developer-image">
+              <img [src]="dev.image" [alt]="dev.name" class="dev-photo">
+            </div>
+            <div class="developer-info">
+              <h3>{{ dev.name }}</h3>
+              <p class="role">{{ dev.role }}</p>
+            </div>
+          </div>
+          
+          <div class="card-body">
+            <div class="contact-info">
+              <div class="contact-item">
+                <span class="icon">📧</span>
+                <a [href]="'mailto:' + dev.email">{{ dev.email }}</a>
+              </div>
+              <div class="contact-item">
+                <span class="icon">📱</span>
+                <a [href]="'tel:' + dev.phone">{{ dev.phone }}</a>
+              </div>
+            </div>
+            
+            <div class="skills">
+              <h4>Skills</h4>
+              <div class="skills-list">
+                <span class="skill-tag" *ngFor="let skill of dev.skills">{{ skill }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -8,5 +8,7 @@ export const routes: Routes = [
   { path: 'results', loadComponent: () => import('./components/pages/results/results.component').then(m => m.ResultsComponent) },
   { path: 'notices', loadComponent: () => import('./components/pages/notices/notices.component').then(m => m.NoticesComponent) },
   { path: 'contact', loadComponent: () => import('./components/pages/contact/contact.component').then(m => m.ContactComponent) },
+  { path: 'developers', loadComponent: () => import('./components/pages/developers/developers.component').then(m => m.DevelopersComponent) },
+  { path: 'admin', loadComponent: () => import('./components/pages/admin/admin.component').then(m => m.AdminComponent) },
   { path: '**', redirectTo: '' }
 ];
