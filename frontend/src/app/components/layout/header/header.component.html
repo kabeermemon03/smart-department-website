@@ -1,0 +1,25 @@
+<header class="header">
+  <div class="container">
+    <div class="logo">
+      <img src="assets/images/logo.png" alt="Department Logo" class="logo-img">
+      <div class="logo-text">
+        <h1>Electronics Engineering</h1>
+        <span>Department</span>
+      </div>
+    </div>
+    <nav class="nav">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <a routerLink="/about" routerLinkActive="active">About</a>
+      <a routerLink="/faculty" routerLinkActive="active">Faculty</a>
+      <a routerLink="/academics" routerLinkActive="active">Academics</a>
+      <a routerLink="/results" routerLinkActive="active">Results</a>
+      <a routerLink="/notices" routerLinkActive="active">Notices</a>
+      <a routerLink="/contact" routerLinkActive="active">Contact</a>
+    </nav>
+    <div class="mobile-menu" (click)="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</header>
