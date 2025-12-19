@@ -1,0 +1,135 @@
+<div class="admin-page">
+  <!-- Login Section -->
+  <div class="login-section" *ngIf="!isLoggedIn">
+    <div class="container">
+      <div class="login-card">
+        <div class="login-header">
+          <h2>🔐 Admin Panel</h2>
+          <p>Faculty Login Required</p>
+        </div>
+        <form (ngSubmit)="login()" class="login-form">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input 
+              type="text" 
+              id="username" 
+              [(ngModel)]="loginForm.username" 
+              name="username" 
+              required
+              placeholder="Enter username">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input 
+              type="password" 
+              id="password" 
+              [(ngModel)]="loginForm.password" 
+              name="password" 
+              required
+              placeholder="Enter password">
+          </div>
+          <button type="submit" class="login-btn">Login</button>
+        </form>
+        <div class="demo-credentials">
+          <p><small>Demo: username: <strong>admin</strong>, password: <strong>admin123</strong></small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div class="admin-dashboard" *ngIf="isLoggedIn">
+    <div class="dashboard-header">
+      <div class="container">
+        <div class="header-content">
+          <h1>📊 Admin Dashboard</h1>
+          <button (click)="logout()" class="logout-btn">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-content">
+      <div class="container">
+        <!-- Upload Section -->
+        <div class="upload-section">
+          <h2>📤 Upload Result PDF</h2>
+          <form (ngSubmit)="uploadResult()" class="upload-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="semester">Semester</label>
+                <select id="semester" [(ngModel)]="uploadForm.semester" name="semester" required>
+                  <option value="">Select Semester</option>
+                  <option value="1">Semester 1</option>
+                  <option value="2">Semester 2</option>
+                  <option value="3">Semester 3</option>
+                  <option value="4">Semester 4</option>
+                  <option value="5">Semester 5</option>
+                  <option value="6">Semester 6</option>
+                  <option value="7">Semester 7</option>
+                  <option value="8">Semester 8</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="course">Course</label>
+                <select id="course" [(ngModel)]="uploadForm.course" name="course" required>
+                  <option value="">Select Course</option>
+                  <option value="Electronics Engineering">Electronics Engineering</option>
+                  <option value="Computer Engineering">Computer Engineering</option>
+                  <option value="Electrical Engineering">Electrical Engineering</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="title">Result Title</label>
+              <input 
+                type="text" 
+                id="title" 
+                [(ngModel)]="uploadForm.title" 
+                name="title" 
+                required
+                placeholder="e.g., Final Exam Results - Spring 2024">
+            </div>
+            <div class="form-group">
+              <label for="file">PDF File</label>
+              <input 
+                type="file" 
+                id="file" 
+                (change)="onFileSelect($event)" 
+                accept=".pdf" 
+                required>
+            </div>
+            <button type="submit" class="upload-btn">Upload Result</button>
+          </form>
+        </div>
+
+        <!-- Uploaded Results Management -->
+        <div class="results-management">
+          <h2>📋 Manage Uploaded Results</h2>
+          <div class="results-table" *ngIf="uploadedResults.length > 0; else noResults">
+            <div class="table-header">
+              <div class="col">Title</div>
+              <div class="col">Semester</div>
+              <div class="col">Course</div>
+              <div class="col">Upload Date</div>
+              <div class="col">Actions</div>
+            </div>
+            <div class="table-row" *ngFor="let result of uploadedResults">
+              <div class="col">{{ result.title }}</div>
+              <div class="col">Semester {{ result.semester }}</div>
+              <div class="col">{{ result.course }}</div>
+              <div class="col">{{ result.uploadDate }}</div>
+              <div class="col">
+                <button (click)="deleteResult(result.id)" class="delete-btn">🗑️ Delete</button>
+              </div>
+            </div>
+          </div>
+          <ng-template #noResults>
+            <div class="no-results">
+              <p>No results uploaded yet.</p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
