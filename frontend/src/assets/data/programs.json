@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Bachelor of Electronics Engineering",
+    "duration": "4 Years",
+    "description": "Comprehensive undergraduate program covering analog electronics, digital systems, microprocessors, and communication systems.",
+    "syllabusUrl": "assets/pdfs/bee-syllabus.pdf"
+  },
+  {
+    "id": 2,
+    "name": "Master of Electronics Engineering",
+    "duration": "2 Years",
+    "description": "Advanced graduate program focusing on VLSI design, embedded systems, signal processing, and power electronics.",
+    "syllabusUrl": "assets/pdfs/mee-syllabus.pdf"
+  },
+  {
+    "id": 3,
+    "name": "PhD in Electronics Engineering",
+    "duration": "3-5 Years",
+    "description": "Doctoral program for students pursuing advanced research in electronics and communication engineering.",
+    "syllabusUrl": "assets/pdfs/phd-ee-syllabus.pdf"
+  }
+]

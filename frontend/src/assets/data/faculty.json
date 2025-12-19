@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "name": "Dr. Ahmed Hassan",
+    "designation": "Professor & Head of Department",
+    "email": "ahmed.hassan@university.edu",
+    "photo": "assets/images/faculty/ahmed-hassan.jpg",
+    "research": "VLSI Design, Digital Signal Processing"
+  },
+  {
+    "id": 2,
+    "name": "Dr. Fatima Khan",
+    "designation": "Associate Professor",
+    "email": "fatima.khan@university.edu",
+    "photo": "assets/images/faculty/fatima-khan.jpg",
+    "research": "Power Electronics, Renewable Energy Systems"
+  },
+  {
+    "id": 3,
+    "name": "Dr. Muhammad Ali",
+    "designation": "Assistant Professor",
+    "email": "muhammad.ali@university.edu",
+    "photo": "assets/images/faculty/muhammad-ali.jpg",
+    "research": "Embedded Systems, IoT Applications"
+  },
+  {
+    "id": 4,
+    "name": "Dr. Sarah Ahmed",
+    "designation": "Assistant Professor",
+    "email": "sarah.ahmed@university.edu",
+    "photo": "assets/images/faculty/sarah-ahmed.jpg",
+    "research": "Communication Systems, Antenna Design"
+  }
+]

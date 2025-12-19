@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "title": "Semester Examination Schedule",
+    "date": "2024-03-15",
+    "description": "Final examination schedule for Spring 2024 semester has been released.",
+    "pdfUrl": "assets/pdfs/exam-schedule-spring-2024.pdf"
+  },
+  {
+    "id": 2,
+    "title": "Holiday Notice",
+    "date": "2024-03-10",
+    "description": "University will remain closed on March 20th for national holiday.",
+    "pdfUrl": "assets/pdfs/holiday-notice-march-2024.pdf"
+  },
+  {
+    "id": 3,
+    "title": "New Course Registration",
+    "date": "2024-03-05",
+    "description": "Registration for summer courses will begin from March 25th.",
+    "pdfUrl": "assets/pdfs/summer-registration-2024.pdf"
+  }
+]

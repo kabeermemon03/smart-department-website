@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "Spring 2024 - Semester 6 Results",
+    "semester": "6",
+    "course": "Computer Science",
+    "date": "2024-03-15",
+    "pdfUrl": "assets/pdfs/results-spring-2024-sem6-cs.pdf"
+  },
+  {
+    "id": 2,
+    "title": "Spring 2024 - Semester 4 Results",
+    "semester": "4",
+    "course": "Computer Science",
+    "date": "2024-03-12",
+    "pdfUrl": "assets/pdfs/results-spring-2024-sem4-cs.pdf"
+  },
+  {
+    "id": 3,
+    "title": "Spring 2024 - Semester 2 Results",
+    "semester": "2",
+    "course": "Computer Science",
+    "date": "2024-03-10",
+    "pdfUrl": "assets/pdfs/results-spring-2024-sem2-cs.pdf"
+  }
+]
