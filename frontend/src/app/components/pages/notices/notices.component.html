@@ -1,0 +1,145 @@
+<div class="notices-page">
+  <!-- Hero Section -->
+  <section class="notices-hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="animate-fade-up">News & Announcements</h1>
+      <p class="hero-subtitle animate-fade-up delay-1">Stay updated with the latest news, events, and important announcements</p>
+    </div>
+  </section>
+
+  <!-- Filter Tabs -->
+  <section class="filter-tabs">
+    <div class="container">
+      <div class="tabs-container">
+        <button class="tab-btn active" data-category="all">All Updates</button>
+        <button class="tab-btn" data-category="news">News</button>
+        <button class="tab-btn" data-category="announcements">Announcements</button>
+        <button class="tab-btn" data-category="events">Events</button>
+        <button class="tab-btn" data-category="academic">Academic</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Notice -->
+  <section class="featured-notice" *ngIf="featuredNotice">
+    <div class="container">
+      <div class="featured-card animate-slide-up">
+        <div class="featured-badge">Featured</div>
+        <div class="featured-content">
+          <div class="featured-meta">
+            <span class="category-badge" [class]="getCategoryClass(featuredNotice.category)">
+              {{ getCategoryLabel(featuredNotice.category) }}
+            </span>
+            <span class="date">{{ featuredNotice.date | date:'mediumDate' }}</span>
+          </div>
+          <h2>{{ featuredNotice.title }}</h2>
+          <p>{{ featuredNotice.excerpt }}</p>
+          <button class="read-more-btn" (click)="openNotice(featuredNotice)">Read Full Article</button>
+        </div>
+        <div class="featured-image">
+          <div class="image-placeholder">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Notices Grid -->
+  <section class="notices-grid-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Latest Updates</h2>
+        <p class="notices-count">{{ filteredNotices.length }} update(s) available</p>
+      </div>
+
+      <div class="notices-grid">
+        <div class="notice-card animate-slide-up" 
+             *ngFor="let notice of filteredNotices; let i = index" 
+             [style.animation-delay]="(i * 0.1) + 's'"
+             [class.urgent]="notice.urgent">
+          
+          <div class="notice-header">
+            <div class="notice-meta">
+              <span class="category-badge" [class]="getCategoryClass(notice.category)">
+                {{ getCategoryLabel(notice.category) }}
+              </span>
+              <span class="urgent-badge" *ngIf="notice.urgent">Urgent</span>
+            </div>
+            <span class="notice-date">{{ notice.date | date:'shortDate' }}</span>
+          </div>
+
+          <div class="notice-content">
+            <h3>{{ notice.title }}</h3>
+            <p class="notice-excerpt">{{ notice.excerpt }}</p>
+            
+            <div class="notice-details" *ngIf="notice.details">
+              <div class="detail-item" *ngIf="notice.details.venue">
+                <span class="icon">📍</span>
+                <span>{{ notice.details.venue }}</span>
+              </div>
+              <div class="detail-item" *ngIf="notice.details.time">
+                <span class="icon">⏰</span>
+                <span>{{ notice.details.time }}</span>
+              </div>
+              <div class="detail-item" *ngIf="notice.details.deadline">
+                <span class="icon">📅</span>
+                <span>Deadline: {{ notice.details.deadline | date:'shortDate' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="notice-actions">
+            <button class="action-btn primary" (click)="openNotice(notice)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+              Read More
+            </button>
+            <button class="action-btn secondary" *ngIf="notice.downloadUrl" (click)="downloadAttachment(notice)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+              </svg>
+              Download
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Notices Message -->
+      <div class="no-notices" *ngIf="filteredNotices.length === 0">
+        <div class="no-notices-icon">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+        <h3>No Updates Found</h3>
+        <p>No news or announcements match your current filter. Check back later for updates.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Signup -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="newsletter-card">
+        <div class="newsletter-content">
+          <h3>Stay Updated</h3>
+          <p>Subscribe to our newsletter to receive the latest news and announcements directly in your inbox.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="Enter your email address" class="email-input">
+            <button class="subscribe-btn">Subscribe</button>
+          </div>
+        </div>
+        <div class="newsletter-icon">
+          <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

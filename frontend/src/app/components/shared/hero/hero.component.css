@@ -222,9 +222,9 @@
   position: absolute;
   width: 4px;
   height: 4px;
-  background: #ff6b6b;
+  background: #00ff88;
   border-radius: 50%;
-  box-shadow: 0 0 10px #ff6b6b;
+  box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
   animation: data-travel 6s linear infinite;
 }
 
