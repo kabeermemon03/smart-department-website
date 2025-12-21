@@ -2,28 +2,16 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/layout/header/header.component';
 import { FooterComponent } from './components/layout/footer/footer.component';
+import { AiChatbotComponent } from './components/shared/ai-chatbot/ai-chatbot.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, FooterComponent],
-  template: `
-    <div class="app-container">
-      <app-header></app-header>
-      <main class="main-content">
-        <router-outlet></router-outlet>
-      </main>
-      <app-footer></app-footer>
-    </div>
-  `,
-  styles: [`
-    .app-container {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .main-content {
-      flex: 1;
-    }
-  `]
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, AiChatbotComponent],
+  templateUrl: './app.html',
+  styleUrls: ['./app.css']
 })
-export class App {}
+export class App {
+  title() {
+    return 'Smart Department';
+  }
+}

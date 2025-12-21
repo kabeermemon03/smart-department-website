@@ -14,6 +14,8 @@ export class AdminComponent {
     username: '',
     password: ''
   };
+  // NOTE: Backend auth is required. Admin features are disabled until a backend is configured.
+  backendConfigured = false;
 
   uploadForm = {
     semester: '',
@@ -25,13 +27,11 @@ export class AdminComponent {
   uploadedResults: any[] = [];
 
   login() {
-    // Simple authentication - replace with backend API call
-    if (this.loginForm.username === 'admin' && this.loginForm.password === 'admin123') {
-      this.isLoggedIn = true;
-      this.loadResults();
-    } else {
-      alert('Invalid credentials');
+    if (!this.backendConfigured) {
+      alert('Admin area is disabled: no backend configured yet. Please configure backend authentication to enable admin features.');
+      return;
     }
+    // TODO: Implement real backend auth (API call, JWT/session) and remove any client-side checks.
   }
 
   logout() {
@@ -49,29 +49,20 @@ export class AdminComponent {
   }
 
   uploadResult() {
-    if (this.uploadForm.file && this.uploadForm.semester && this.uploadForm.course && this.uploadForm.title) {
-      // Simulate file upload - replace with backend API call
-      const newResult = {
-        id: Date.now(),
-        title: this.uploadForm.title,
-        semester: this.uploadForm.semester,
-        course: this.uploadForm.course,
-        fileName: this.uploadForm.file.name,
-        uploadDate: new Date().toLocaleDateString(),
-        fileUrl: URL.createObjectURL(this.uploadForm.file) // Temporary URL for demo
-      };
-      
-      this.uploadedResults.push(newResult);
-      this.saveToLocalStorage();
-      this.resetUploadForm();
-      alert('Result uploaded successfully!');
-    } else {
-      alert('Please fill all fields and select a PDF file');
+    if (!this.backendConfigured) {
+      alert('Upload disabled: backend not configured. This will be enabled once a server API is available.');
+      return;
     }
+    // TODO: Implement secure backend upload and storage (S3/Cloud Storage) with auth.
   }
 
   deleteResult(id: number) {
+    if (!this.backendConfigured) {
+      alert('Delete disabled: backend not configured. This will be enabled once a server API is available.');
+      return;
+    }
     if (confirm('Are you sure you want to delete this result?')) {
+      // TODO: call backend to delete
       this.uploadedResults = this.uploadedResults.filter(result => result.id !== id);
       this.saveToLocalStorage();
     }

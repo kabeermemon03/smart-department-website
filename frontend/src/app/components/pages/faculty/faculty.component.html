@@ -318,6 +318,93 @@
     </div>
   </section>
 
+  <!-- Laboratories Section -->
+  <section class="laboratories-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">
+          <span>🔬 Our Facilities</span>
+        </div>
+        <h2 class="animate-fade-up">State-of-the-Art Laboratories</h2>
+        <p class="animate-fade-up delay-1">Modern facilities equipped with cutting-edge technology for hands-on learning</p>
+      </div>
+
+      <div class="labs-grid">
+        <div class="lab-card animate-slide-up" *ngFor="let lab of laboratories; let i = index" [style.animation-delay.ms]="i * 200">
+          <div class="lab-image-container">
+            <img [src]="lab.image" [alt]="lab.name" class="lab-image">
+            <div class="lab-overlay">
+              <div class="overlay-content">
+                <h4>{{ lab.name }}</h4>
+                <p>{{ lab.shortDescription }}</p>
+                <button class="view-details-btn" (click)="openLabDetails(lab)">
+                  <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                  </svg>
+                  View Details
+                </button>
+              </div>
+            </div>
+            <div class="lab-badge" [style.background]="lab.color">
+              <span class="lab-icon">{{ lab.icon }}</span>
+            </div>
+          </div>
+          
+          <div class="lab-content">
+            <div class="lab-header">
+              <h3 class="lab-title">{{ lab.name }}</h3>
+              <div class="lab-capacity">
+                <span class="capacity-icon">👥</span>
+                <span>{{ lab.capacity }} Students</span>
+              </div>
+            </div>
+            
+            <p class="lab-description">{{ lab.description }}</p>
+            
+            <div class="lab-features">
+              <h4 class="features-title">
+                <span class="features-icon">⚡</span>
+                Key Features
+              </h4>
+              <div class="features-grid">
+                <div class="feature-item" *ngFor="let feature of lab.features">
+                  <span class="feature-dot"></span>
+                  <span>{{ feature }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="lab-equipment">
+              <h4 class="equipment-title">
+                <span class="equipment-icon">🔧</span>
+                Equipment
+              </h4>
+              <div class="equipment-tags">
+                <span class="equipment-tag" *ngFor="let equipment of lab.equipment">
+                  {{ equipment }}
+                </span>
+              </div>
+            </div>
+            
+            <div class="lab-footer">
+              <div class="lab-supervisor">
+                <span class="supervisor-icon">👨‍🔬</span>
+                <div class="supervisor-info">
+                  <span class="supervisor-label">Lab Supervisor</span>
+                  <span class="supervisor-name">{{ lab.supervisor }}</span>
+                </div>
+              </div>
+              <div class="lab-location">
+                <span class="location-icon">📍</span>
+                <span>{{ lab.location }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Lab Engineers & Technical Staff -->
   <section class="lab-staff-section">
     <div class="container">
