@@ -1,0 +1,16 @@
+{
+  "name": "Electronics Engineering Department - MUET",
+  "short_name": "EE Dept",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "description": "Official site for the Electronics Engineering Department, MUET.",
+  "icons": [
+    {
+      "src": "/assets/images/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

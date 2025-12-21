@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 
 interface Notice {
   id: string;
@@ -30,6 +31,8 @@ export class NoticesComponent implements OnInit {
   filteredNotices: Notice[] = [];
   featuredNotice: Notice | null = null;
   selectedCategory: string = 'all';
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   // Sample data
   sampleNotices: Notice[] = [
@@ -126,26 +129,28 @@ export class NoticesComponent implements OnInit {
   }
 
   initializeTabs() {
-    // Add event listeners for tab buttons
-    setTimeout(() => {
-      const tabButtons = document.querySelectorAll('.tab-btn');
-      tabButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-          const target = e.target as HTMLElement;
-          const category = target.getAttribute('data-category') || 'all';
-          
-          // Remove active class from all buttons
-          tabButtons.forEach(btn => btn.classList.remove('active'));
-          
-          // Add active class to clicked button
-          target.classList.add('active');
-          
-          // Filter notices
-          this.selectedCategory = category;
-          this.filterNotices();
+    // Add event listeners for tab buttons - only in browser
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        tabButtons.forEach(button => {
+          button.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement;
+            const category = target.getAttribute('data-category') || 'all';
+            
+            // Remove active class from all buttons
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            target.classList.add('active');
+            
+            // Filter notices
+            this.selectedCategory = category;
+            this.filterNotices();
+          });
         });
-      });
-    }, 100);
+      }, 100);
+    }
   }
 
   filterNotices() {

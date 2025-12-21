@@ -87,28 +87,34 @@
 
         <div class="message-form">
           <h2>Send us a Message</h2>
-          <form class="contact-form">
+          <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+          <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+          <form [formGroup]="contactForm" (ngSubmit)="submit()" class="contact-form">
             <div class="form-group">
               <label for="name">Full Name</label>
-              <input type="text" id="name" name="name" required>
+              <input formControlName="name" type="text" id="name" name="name">
+              <div class="field-error" *ngIf="contactForm.controls['name'].touched && contactForm.controls['name'].invalid">Name is required.</div>
             </div>
             
             <div class="form-group">
               <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" required>
+              <input formControlName="email" type="email" id="email" name="email">
+              <div class="field-error" *ngIf="contactForm.controls['email'].touched && contactForm.controls['email'].invalid">Valid email is required.</div>
             </div>
             
             <div class="form-group">
               <label for="subject">Subject</label>
-              <input type="text" id="subject" name="subject" required>
+              <input formControlName="subject" type="text" id="subject" name="subject">
+              <div class="field-error" *ngIf="contactForm.controls['subject'].touched && contactForm.controls['subject'].invalid">Subject is required.</div>
             </div>
             
             <div class="form-group">
               <label for="message">Message</label>
-              <textarea id="message" name="message" rows="5" required></textarea>
+              <textarea formControlName="message" id="message" name="message" rows="5"></textarea>
+              <div class="field-error" *ngIf="contactForm.controls['message'].touched && contactForm.controls['message'].invalid">Message is required.</div>
             </div>
             
-            <button type="submit" class="submit-btn">Send Message</button>
+            <button type="submit" class="submit-btn" [disabled]="contactForm.invalid || submitting">{{ submitting ? 'Sending...' : 'Send Message' }}</button>
           </form>
         </div>
       </div>

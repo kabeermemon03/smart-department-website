@@ -10,28 +10,48 @@ import { CommonModule } from '@angular/common';
 export class DevelopersComponent {
   developers = [
     {
-      name: 'Developer 1',
-      role: 'Full Stack Developer',
-      email: 'dev1@example.com',
+      name: 'Ahmed Khan',
+      role: 'Lead Developer',
+      email: 'ahmed.khan@muet.edu.pk',
       phone: '+92 300 1234567',
-      skills: ['Angular', 'Node.js', 'MongoDB'],
-      image: 'assets/images/dev1.jpg'
+      skills: ['Angular', 'TypeScript', 'Node.js', 'System Architecture'],
+      image: 'assets/images/dev1.jpg',
+      color: '#3b82f6'
     },
     {
-      name: 'Developer 2', 
-      role: 'Frontend Developer',
-      email: 'dev2@example.com',
+      name: 'Sara Ali', 
+      role: 'Database Handler',
+      email: 'sara.ali@muet.edu.pk',
       phone: '+92 300 2345678',
-      skills: ['React', 'Vue.js', 'CSS'],
-      image: 'assets/images/dev2.jpg'
+      skills: ['MongoDB', 'PostgreSQL', 'Data Modeling', 'API Integration'],
+      image: 'assets/images/dev2.jpg',
+      color: '#8b5cf6'
     },
     {
-      name: 'Developer 3',
-      role: 'Backend Developer', 
-      email: 'dev3@example.com',
+      name: 'Fatima Raza',
+      role: 'UI/UX Designer', 
+      email: 'fatima.raza@muet.edu.pk',
       phone: '+92 300 3456789',
-      skills: ['Python', 'Django', 'PostgreSQL'],
-      image: 'assets/images/dev3.jpg'
+      skills: ['Figma', 'Adobe XD', 'CSS Animations', 'Responsive Design'],
+      image: 'assets/images/dev3.jpg',
+      color: '#ec4899'
     }
   ];
+
+  getRoleIcon(role: string): string {
+    switch(role) {
+      case 'Lead Developer': return '👨‍💻';
+      case 'Database Handler': return '🗄️';
+      case 'UI/UX Designer': return '🎨';
+      default: return '💼';
+    }
+  }
+
+  openEmail(email: string) {
+    window.open(`mailto:${email}`);
+  }
+
+  openPhone(phone: string) {
+    window.open(`tel:${phone}`);
+  }
 }

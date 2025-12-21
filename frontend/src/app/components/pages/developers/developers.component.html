@@ -1,43 +1,155 @@
 <div class="developers-page">
+  <!-- Animated Background -->
+  <div class="animated-bg">
+    <div class="bg-element bg-1"></div>
+    <div class="bg-element bg-2"></div>
+    <div class="bg-element bg-3"></div>
+    <div class="bg-element bg-4"></div>
+  </div>
+
   <div class="hero-section">
     <div class="container">
-      <h1>Meet Our Developer Team</h1>
-      <p>The talented individuals behind this website</p>
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-icon">✨</span>
+          <span>Meet Our Team</span>
+        </div>
+        <h1 class="hero-title">
+          <span class="title-line">Creative Minds</span>
+          <span class="title-line gradient-text">Behind Innovation</span>
+        </h1>
+        <p class="hero-subtitle">Passionate developers crafting digital excellence</p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Experts</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-number">100+</div>
+            <div class="stat-label">Projects</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Support</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   
   <div class="developers-section">
     <div class="container">
+      <div class="section-header">
+        <div class="section-badge">
+          <span>👥 Our Team</span>
+        </div>
+        <h2 class="section-title">Meet The Architects</h2>
+        <p class="section-subtitle">Talented individuals shaping the future of technology</p>
+      </div>
+      
       <div class="developers-grid">
-        <div class="developer-card" *ngFor="let dev of developers">
+        <div class="developer-card" *ngFor="let dev of developers; let i = index" 
+             [class]="'card-' + (i + 1)"
+             [style.animation-delay.ms]="i * 300">
+          
+          <!-- Card Glow Effect -->
+          <div class="card-glow" [style.background]="'radial-gradient(circle at 50% 50%, ' + dev.color + '20, transparent 70%)'"></div>
+          
+          <!-- Card Header -->
           <div class="card-header">
             <div class="developer-image">
-              <img [src]="dev.image" [alt]="dev.name" class="dev-photo">
-            </div>
-            <div class="developer-info">
-              <h3>{{ dev.name }}</h3>
-              <p class="role">{{ dev.role }}</p>
+              <div class="image-container">
+                <div class="image-ring" [style.border-color]="dev.color"></div>
+                <div class="image-wrapper">
+                  <img [src]="dev.image" [alt]="dev.name" class="dev-photo">
+                  <div class="image-shine"></div>
+                </div>
+                <div class="status-dot">
+                  <div class="dot-inner"></div>
+                </div>
+              </div>
             </div>
           </div>
           
+          <!-- Card Body -->
           <div class="card-body">
-            <div class="contact-info">
-              <div class="contact-item">
-                <span class="icon">📧</span>
-                <a [href]="'mailto:' + dev.email">{{ dev.email }}</a>
-              </div>
-              <div class="contact-item">
-                <span class="icon">📱</span>
-                <a [href]="'tel:' + dev.phone">{{ dev.phone }}</a>
+            <div class="developer-info">
+              <h3 class="dev-name">{{ dev.name }}</h3>
+              <div class="role-badge" [style.background]="dev.color + '15'" [style.color]="dev.color">
+                <span class="role-icon">{{ getRoleIcon(dev.role) }}</span>
+                <span>{{ dev.role }}</span>
               </div>
             </div>
             
-            <div class="skills">
-              <h4>Skills</h4>
-              <div class="skills-list">
-                <span class="skill-tag" *ngFor="let skill of dev.skills">{{ skill }}</span>
+            <!-- Contact Section -->
+            <div class="contact-section">
+              <div class="contact-item" (click)="openEmail(dev.email)">
+                <div class="contact-icon-wrapper">
+                  <svg class="contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                  </svg>
+                </div>
+                <div class="contact-details">
+                  <span class="contact-label">Email</span>
+                  <span class="contact-value">{{ dev.email }}</span>
+                </div>
+              </div>
+              
+              <div class="contact-item" (click)="openPhone(dev.phone)">
+                <div class="contact-icon-wrapper">
+                  <svg class="contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                  </svg>
+                </div>
+                <div class="contact-details">
+                  <span class="contact-label">Phone</span>
+                  <span class="contact-value">{{ dev.phone }}</span>
+                </div>
               </div>
             </div>
+            
+            <!-- Skills Section -->
+            <div class="skills-section">
+              <div class="skills-header">
+                <span class="skills-icon">🚀</span>
+                <span class="skills-title">Expertise</span>
+              </div>
+              <div class="skills-container">
+                <div class="skill-item" *ngFor="let skill of dev.skills; let j = index" 
+                     [style.animation-delay.ms]="(i * 300) + (j * 100)"
+                     [style.border-color]="dev.color">
+                  <span class="skill-text">{{ skill }}</span>
+                  <div class="skill-glow" [style.background]="dev.color"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="card-actions">
+              <button class="action-btn primary" [style.background]="'linear-gradient(135deg, ' + dev.color + ', ' + dev.color + 'CC)'">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                </svg>
+                <span>View Portfolio</span>
+                <div class="btn-shine"></div>
+              </button>
+              
+              <button class="action-btn secondary">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                <span>Connect</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Decorative Elements -->
+          <div class="card-decoration">
+            <div class="decoration-dot dot-1"></div>
+            <div class="decoration-dot dot-2"></div>
+            <div class="decoration-dot dot-3"></div>
           </div>
         </div>
       </div>
