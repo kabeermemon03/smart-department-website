@@ -1,58 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgForOf } from '@angular/common';
 import { HeroComponent } from '../../shared/hero/hero.component';
 import { CardComponent } from '../../shared/card/card.component';
 import { RouterLink } from '@angular/router';
+import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { db } from '../../../services/firebase.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, NgForOf, HeroComponent, CardComponent, RouterLink],
   template: `
-    <app-hero 
-      title="Welcome to Electronics Engineering Department" 
+    <app-hero
+      title="Welcome to Electronics Engineering Department"
       subtitle="Innovating Tomorrow's Electronic Systems Through Excellence in Education and Research">
     </app-hero>
-    
-    <!-- Department Showcase Section -->
-    <section class="department-showcase">
-      <div class="container">
-        <div class="showcase-content">
-          <div class="showcase-image">
-            <img src="assets/images/department-front.jpg" alt="Electronics Engineering Department Building" class="dept-image">
-            <div class="image-overlay">
-              <div class="overlay-content">
-                <h3>Our Modern Facilities</h3>
-                <p>State-of-the-art laboratories and research centers</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-info">
-            <div class="info-card">
-              <div class="card-icon">🏛️</div>
-              <h4>Established</h4>
-              <p>1995</p>
-            </div>
-            <div class="info-card">
-              <div class="card-icon">👨‍🎓</div>
-              <h4>Students</h4>
-              <p>500+</p>
-            </div>
-            <div class="info-card">
-              <div class="card-icon">👨‍🏫</div>
-              <h4>Faculty</h4>
-              <p>25+</p>
-            </div>
-            <div class="info-card">
-              <div class="card-icon">🔬</div>
-              <h4>Labs</h4>
-              <p>12</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    
+
     <!-- Chairperson Message Section -->
     <section class="chairperson-message">
       <div class="container">
@@ -62,7 +25,7 @@ import { RouterLink } from '@angular/router';
               <img src="assets/images/chairperson.jpg" alt="Chairperson" class="chair-image">
             </div>
             <div class="chairperson-details">
-              <h3>Dr. Sarah Ahmed</h3>
+              <h3>Prof. Dr. Wajiha Shah</h3>
               <p class="title">Chairperson</p>
               <p class="department">Electronics Engineering Department</p>
             </div>
@@ -70,17 +33,45 @@ import { RouterLink } from '@angular/router';
           <div class="message-text">
             <h2>Message from Chairperson</h2>
             <blockquote>
-              "Welcome to the Electronics Engineering Department at MUET. Our department is committed to providing world-class education and fostering innovation in the field of electronics engineering. We strive to prepare our students for the challenges of tomorrow's technological landscape through cutting-edge research and industry partnerships."
+              Welcome to the Department of Electronic Engineering, Mehran University of Engineering & Technology, Pakistan. I am honored to serve this department as chairperson. The department of Electronic Engineering was established in 1972. This department is one of the best departments of Pakistan's Engineering Universities and has already produced more than 2500 Graduates and this number is ever increasing"
             </blockquote>
             <div class="signature">
-              <p><strong>Dr. Sarah Ahmed</strong></p>
+              <p><strong>Prof. Dr. Wajiha Shah</strong></p>
               <p>Chairperson, Electronics Engineering</p>
             </div>
           </div>
         </div>
       </div>
     </section>
-    
+
+    <!-- Department Showcase Section -->
+    <section class="department-showcase">
+      <div class="container">
+        <div class="showcase-info">
+          <div class="info-card">
+            <div class="card-icon">📅</div>
+            <h4>Established</h4>
+            <p>1972</p>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">👥</div>
+            <h4>Faculty Members</h4>
+            <p>25+</p>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">🎓</div>
+            <h4>Graduates</h4>
+            <p>2500+</p>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">🏆</div>
+            <h4>Research Projects</h4>
+            <p>50+</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- University Links Section -->
     <section class="university-links">
       <div class="container">
@@ -89,17 +80,17 @@ import { RouterLink } from '@angular/router';
           <p>Quick access to essential university resources and services</p>
         </div>
         <div class="services-grid">
-          <a href="#" class="service-link facebook">
+          <a href="https://www.facebook.com/muet.pk/" target="_blank" rel="noopener noreferrer" class="service-link facebook">
             <div class="service-icon">📱</div>
             <h4>Facebook Official Page</h4>
             <p>MUET</p>
           </a>
-          <a href="#" class="service-link notifications">
+          <a href="https://site.muet.edu.pk/institutes/institute-science-technology-development/circulars-and-notifications" target="_blank" rel="noopener noreferrer" class="service-link notifications">
             <div class="service-icon">🔔</div>
             <h4>University Notifications</h4>
             <p>Latest Updates</p>
           </a>
-          <a href="#" class="service-link mis">
+          <a href="https://mis.muet.edu.pk/" target="_blank" rel="noopener noreferrer" class="service-link mis">
             <div class="service-icon">📊</div>
             <h4>MIS MUET</h4>
             <p>Management System</p>
@@ -114,7 +105,7 @@ import { RouterLink } from '@angular/router';
             <h4>Examination Department</h4>
             <p>Results & Schedules</p>
           </a>
-          <a href="#" class="service-link gpa">
+          <a routerLink="/gpa" class="service-link gpa">
             <div class="service-icon">🧮</div>
             <h4>GPA Calculator</h4>
             <p>Calculate CGPA</p>
@@ -122,7 +113,7 @@ import { RouterLink } from '@angular/router';
         </div>
       </div>
     </section>
-    
+
     <section class="quick-links">
       <div class="container">
         <div class="section-header">
@@ -158,35 +149,6 @@ import { RouterLink } from '@angular/router';
       </div>
     </section>
 
-    <section class="features">
-      <div class="container">
-        <div class="section-header">
-          <h2>Why Choose Us</h2>
-          <p>Excellence that sets us apart</p>
-        </div>
-        <div class="features-grid">
-          <app-card 
-            title="Advanced Electronics"
-            content="Cutting-edge curriculum in analog, digital, and power electronics designed by industry experts"
-            icon="⚡"
-            buttonText="Learn More">
-          </app-card>
-          <app-card 
-            title="Research Excellence"
-            content="Pioneering research in IoT, Embedded Systems, VLSI Design, and Signal Processing"
-            icon="🔬"
-            buttonText="Explore Research">
-          </app-card>
-          <app-card 
-            title="Industry Partnerships"
-            content="Strong collaborations with leading electronics companies for internships and placements"
-            icon="🏭"
-            buttonText="View Partners">
-          </app-card>
-        </div>
-      </div>
-    </section>
-
     <section class="latest-news">
       <div class="container">
         <div class="section-header">
@@ -197,14 +159,22 @@ import { RouterLink } from '@angular/router';
           <div class="news-card" *ngFor="let news of latestNews">
             <div class="news-date">{{ news.date }}</div>
             <h3>{{ news.title }}</h3>
-            <p>{{ news.summary }}</p>
-            <a href="#" class="read-more">Read More →</a>
+            <p>{{ news.excerpt }}</p>
+            <a routerLink="/notices" class="read-more">Read More →</a>
           </div>
         </div>
       </div>
     </section>
   `,
   styles: [`
+    :host {
+      background-image: url('/assets/images/IMG_6322.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
     .quick-links {
       padding: 5rem 0;
       background: #f8f9fa;
@@ -259,7 +229,7 @@ import { RouterLink } from '@angular/router';
     .quick-link.results::before { background: linear-gradient(90deg, #dc2626, #ef4444); }
     .quick-link.notices::before { background: linear-gradient(90deg, #f59e0b, #f97316); }
     .quick-link.faculty::before { background: linear-gradient(90deg, #7c3aed, #8b5cf6); }
-    
+
     .quick-link:hover {
       transform: translateY(-8px);
       box-shadow: 0 15px 35px rgba(0,0,0,0.15);
@@ -291,15 +261,6 @@ import { RouterLink } from '@angular/router';
     }
     .quick-link:hover .link-arrow {
       transform: translateX(5px);
-    }
-    .features {
-      padding: 5rem 0;
-      background: white;
-    }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 2.5rem;
     }
     .latest-news {
       padding: 5rem 0;
@@ -357,20 +318,20 @@ import { RouterLink } from '@angular/router';
     .read-more:hover {
       text-decoration: underline;
     }
-    
+
     /* Department Showcase Section */
     .department-showcase {
       padding: 4rem 0;
       background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
     }
-    
+
     .showcase-content {
       display: grid;
       grid-template-columns: 2fr 1fr;
       gap: 3rem;
       align-items: center;
     }
-    
+
     .showcase-image {
       position: relative;
       border-radius: 20px;
@@ -378,22 +339,22 @@ import { RouterLink } from '@angular/router';
       box-shadow: 0 20px 40px rgba(0,0,0,0.1);
       transition: transform 0.3s ease;
     }
-    
+
     .showcase-image:hover {
       transform: translateY(-10px);
     }
-    
+
     .dept-image {
       width: 100%;
       height: 400px;
       object-fit: cover;
       transition: transform 0.3s ease;
     }
-    
+
     .showcase-image:hover .dept-image {
       transform: scale(1.05);
     }
-    
+
     .image-overlay {
       position: absolute;
       bottom: 0;
@@ -405,27 +366,27 @@ import { RouterLink } from '@angular/router';
       transform: translateY(100%);
       transition: transform 0.3s ease;
     }
-    
+
     .showcase-image:hover .image-overlay {
       transform: translateY(0);
     }
-    
+
     .overlay-content h3 {
       margin-bottom: 0.5rem;
       font-size: 1.5rem;
     }
-    
+
     .overlay-content p {
       margin: 0;
       opacity: 0.9;
     }
-    
+
     .showcase-info {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1.5rem;
     }
-    
+
     .info-card {
       background: white;
       padding: 2rem;
@@ -435,75 +396,75 @@ import { RouterLink } from '@angular/router';
       transition: all 0.3s ease;
       border: 2px solid transparent;
     }
-    
+
     .info-card:hover {
       transform: translateY(-5px);
       border-color: #1e3a8a;
       box-shadow: 0 15px 40px rgba(30, 58, 138, 0.2);
     }
-    
+
     .card-icon {
       font-size: 2.5rem;
       margin-bottom: 1rem;
       display: block;
     }
-    
+
     .info-card h4 {
       color: #1e3a8a;
       margin-bottom: 0.5rem;
       font-size: 1.1rem;
       font-weight: 600;
     }
-    
+
     .info-card p {
       color: #64748b;
       font-size: 1.5rem;
       font-weight: 700;
       margin: 0;
     }
-    
+
     @media (max-width: 1024px) {
       .showcase-content {
         grid-template-columns: 1fr;
         gap: 2rem;
       }
-      
+
       .dept-image {
         height: 300px;
       }
     }
-    
+
     @media (max-width: 768px) {
       .showcase-info {
         grid-template-columns: 1fr;
       }
-      
+
       .dept-image {
         height: 250px;
       }
     }
-    
+
     /* Chairperson Message Section */
     .chairperson-message {
       padding: 5rem 0;
       background: white;
     }
-    
+
     .message-content {
       display: grid;
       grid-template-columns: 1fr 2fr;
       gap: 4rem;
       align-items: center;
     }
-    
+
     .chairperson-info {
       text-align: center;
     }
-    
+
     .chairperson-photo {
       margin-bottom: 2rem;
     }
-    
+
     .chair-image {
       width: 200px;
       height: 200px;
@@ -512,31 +473,31 @@ import { RouterLink } from '@angular/router';
       border: 4px solid #1e3a8a;
       box-shadow: 0 10px 30px rgba(30, 58, 138, 0.3);
     }
-    
+
     .chairperson-details h3 {
       color: #1e3a8a;
       font-size: 1.5rem;
       margin-bottom: 0.5rem;
     }
-    
+
     .title {
       color: #3b82f6;
       font-weight: 600;
       font-size: 1.1rem;
       margin-bottom: 0.25rem;
     }
-    
+
     .department {
       color: #64748b;
       font-size: 0.9rem;
     }
-    
+
     .message-text h2 {
       color: #1e3a8a;
       margin-bottom: 2rem;
       font-size: 2rem;
     }
-    
+
     blockquote {
       font-size: 1.1rem;
       line-height: 1.8;
@@ -546,24 +507,24 @@ import { RouterLink } from '@angular/router';
       padding-left: 2rem;
       border-left: 4px solid #3b82f6;
     }
-    
+
     .signature p {
       margin: 0.25rem 0;
       color: #64748b;
     }
-    
+
     /* University Links Section */
     .university-links {
       padding: 5rem 0;
       background: #f8fafc;
     }
-    
+
     .services-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 2rem;
     }
-    
+
     .service-link {
       display: block;
       background: white;
@@ -576,54 +537,238 @@ import { RouterLink } from '@angular/router';
       box-shadow: 0 5px 15px rgba(0,0,0,0.08);
       border: 2px solid transparent;
     }
-    
+
     .service-link:hover {
       transform: translateY(-5px);
       border-color: #1e3a8a;
       box-shadow: 0 10px 25px rgba(30, 58, 138, 0.15);
     }
-    
+
     .service-icon {
       font-size: 2.5rem;
       margin-bottom: 1rem;
       display: block;
     }
-    
+
     .service-link h4 {
       color: #1e3a8a;
       margin-bottom: 0.5rem;
       font-size: 1.1rem;
       font-weight: 600;
     }
-    
+
     .service-link p {
       color: #64748b;
       margin: 0;
       font-size: 0.9rem;
     }
-    
+
     @media (max-width: 768px) {
       .message-content {
         grid-template-columns: 1fr;
         gap: 2rem;
         text-align: center;
       }
-      
+
       .chair-image {
         width: 150px;
         height: 150px;
       }
-      
+
       .services-grid {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+
+      .section-header h2 {
+        font-size: 2rem;
+      }
+
+      .section-header p {
+        font-size: 1rem;
+      }
+
+      .links-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .quick-link {
+        padding: 2rem;
+        text-align: center;
+      }
+
+      .link-icon {
+        font-size: 2.5rem;
+      }
+
+      .quick-link h3 {
+        font-size: 1.2rem;
+      }
+
+      .link-arrow {
+        position: static;
+        display: inline-block;
+        margin-top: 1rem;
+        transform: none !important;
+      }
+
+      .news-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .news-card {
+        padding: 1.5rem;
+      }
+
+      .showcase-info {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .info-card {
+        padding: 1.5rem;
+      }
+
+      .card-icon {
+        font-size: 2rem;
+      }
+
+      .info-card h4 {
+        font-size: 1rem;
+      }
+
+      .info-card p {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 1rem;
+      }
+
+      .section-header {
+        margin-bottom: 2rem;
+      }
+
+      .section-header h2 {
+        font-size: 1.8rem;
+      }
+
+      .section-header p {
+        font-size: 0.9rem;
+      }
+
+      .quick-links,
+      .university-links,
+      .latest-news,
+      .chairperson-message,
+      .department-showcase {
+        padding: 3rem 0;
+      }
+
+      .quick-link {
+        padding: 1.5rem;
+      }
+
+      .link-icon {
+        font-size: 2rem;
+      }
+
+      .quick-link h3 {
+        font-size: 1.1rem;
+      }
+
+      .quick-link p {
+        font-size: 0.9rem;
+      }
+
+      .news-card {
+        padding: 1.2rem;
+      }
+
+      .news-card h3 {
+        font-size: 1.1rem;
+      }
+
+      .showcase-info {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .info-card {
+        padding: 1.2rem;
+      }
+
+      .card-icon {
+        font-size: 1.8rem;
+      }
+
+      .info-card h4 {
+        font-size: 0.9rem;
+      }
+
+      .info-card p {
+        font-size: 1.2rem;
+      }
+
+      .message-text h2 {
+        font-size: 1.6rem;
+      }
+
+      blockquote {
+        font-size: 1rem;
+        padding-left: 1rem;
+      }
+
+      .chairperson-details h3 {
+        font-size: 1.3rem;
+      }
+
+      .service-link {
+        padding: 1.5rem;
+      }
+
+      .service-icon {
+        font-size: 2rem;
+      }
+
+      .service-link h4 {
+        font-size: 1rem;
+      }
+
+      .service-link p {
+        font-size: 0.8rem;
       }
     }
   `]
 })
-export class HomeComponent {
-  latestNews = [
-    { title: 'New VLSI Design Lab Inaugurated', date: 'March 15, 2024', summary: 'State-of-the-art VLSI design facility with advanced EDA tools for chip design and verification projects.' },
-    { title: 'Students Win IEEE Electronics Competition', date: 'March 10, 2024', summary: 'Our electronics engineering students secured first place in the National IEEE Circuit Design Challenge.' },
-    { title: 'Industry Partnership with Tech Giants', date: 'March 5, 2024', summary: 'Strategic collaboration with leading semiconductor companies to enhance curriculum and research opportunities.' }
-  ];
+export class HomeComponent implements OnInit {
+  latestNews: any[] = [];
+
+  ngOnInit() {
+    this.loadLatestNews();
+  }
+
+  async loadLatestNews() {
+    try {
+      const noticesRef = collection(db, 'notices');
+      const q = query(noticesRef, orderBy('date', 'desc'), limit(6));
+      const querySnapshot = await getDocs(q);
+
+      this.latestNews = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+    } catch (error) {
+      console.error('Error loading latest news:', error);
+      // Fallback to some default news if Firebase fails
+      this.latestNews = [
+        { title: 'Welcome to Electronics Engineering', date: '2024-01-01', excerpt: 'Explore our cutting-edge programs and research opportunities.' },
+        { title: 'Department Facilities', date: '2024-01-01', excerpt: 'State-of-the-art laboratories and modern classrooms for enhanced learning.' },
+        { title: 'Faculty Excellence', date: '2024-01-01', excerpt: 'Learn from experienced professors and industry experts.' }
+      ];
+    }
+  }
 }

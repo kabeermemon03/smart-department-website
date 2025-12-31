@@ -17,10 +17,20 @@
       <a routerLink="/contact" routerLinkActive="active">Contact</a>
       <a routerLink="/admin" routerLinkActive="active" class="admin-link">Admin</a>
     </nav>
-    <div class="mobile-menu" (click)="toggleMobileMenu()">
+    <div class="mobile-menu" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
       <span></span>
       <span></span>
       <span></span>
     </div>
+  </div>
+  <div class="mobile-nav" [class.active]="isMobileMenuOpen">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="toggleMobileMenu()">Home</a>
+    <a routerLink="/about" routerLinkActive="active" (click)="toggleMobileMenu()">Department</a>
+    <a routerLink="/faculty" routerLinkActive="active" (click)="toggleMobileMenu()">Faculty</a>
+    <a routerLink="/academics" routerLinkActive="active" (click)="toggleMobileMenu()">Academics</a>
+    <a routerLink="/results" routerLinkActive="active" (click)="toggleMobileMenu()">Results</a>
+    <a routerLink="/notices" routerLinkActive="active" (click)="toggleMobileMenu()">Notices</a>
+    <a routerLink="/contact" routerLinkActive="active" (click)="toggleMobileMenu()">Contact</a>
+    <a routerLink="/admin" routerLinkActive="active" class="admin-link" (click)="toggleMobileMenu()">Admin</a>
   </div>
 </header>
