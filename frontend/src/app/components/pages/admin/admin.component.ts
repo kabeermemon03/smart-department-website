@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { auth, db } from '../../../services/firebase.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-admin',
@@ -22,12 +23,12 @@ export class AdminComponent implements OnInit {
   };
 
   // Teacher credentials
-  private readonly TEACHER_EMAIL = 'teacher@esmuet.edu.pk';
-  private readonly TEACHER_PASSWORD = 'esmuet1972';
+  private readonly TEACHER_EMAIL = environment.adminCredentials.teacher.email;
+  private readonly TEACHER_PASSWORD = environment.adminCredentials.teacher.password;
 
   // Student credentials
-  private readonly STUDENT_EMAIL = 'student@esmuet.edu.pk';
-  private readonly STUDENT_PASSWORD = 'newsadmin2024';
+  private readonly STUDENT_EMAIL = environment.adminCredentials.student.email;
+  private readonly STUDENT_PASSWORD = environment.adminCredentials.student.password;
   notices: any[] = [];
   noticeForm = {
     title: '',
