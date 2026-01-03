@@ -87,8 +87,6 @@
 
         <div class="message-form">
           <h2>Send us a Message</h2>
-          <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
-          <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
           <form [formGroup]="contactForm" (ngSubmit)="submit()" class="contact-form">
             <div class="form-group">
               <label for="name">Full Name</label>
@@ -114,7 +112,10 @@
               <div class="field-error" *ngIf="contactForm.controls['message'].touched && contactForm.controls['message'].invalid">Message is required.</div>
             </div>
             
-            <button type="submit" class="submit-btn" [disabled]="contactForm.invalid || submitting">{{ submitting ? 'Sending...' : 'Send Message' }}</button>
+            <button type="submit" class="submit-btn" [disabled]="contactForm.invalid || submitting">
+              <span *ngIf="!submitting">Send Message</span>
+              <span *ngIf="submitting">Sending...</span>
+            </button>
           </form>
         </div>
       </div>

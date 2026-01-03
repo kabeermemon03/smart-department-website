@@ -1,6 +1,10 @@
 .hero {
   position: relative;
-  background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #21262d 100%);
+  background-image: url('/assets/images/IMG_6322.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -9,279 +13,13 @@
   color: white;
 }
 
-.processor-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
-}
-
-/* Main Processor Chip */
-.processor-chip {
-  position: absolute;
-  top: 15%;
-  right: 8%;
-  width: 120px;
-  height: 120px;
-  background: linear-gradient(45deg, #2d3748, #4a5568);
-  border: 2px solid #00ff88;
-  border-radius: 8px;
-  box-shadow: 0 0 30px rgba(0, 255, 136, 0.5), inset 0 0 20px rgba(0, 255, 136, 0.2);
-  animation: processor-pulse 3s ease-in-out infinite;
-}
-
-.chip-core {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
-  background: radial-gradient(circle, #00ff88, #00d4ff);
-  border-radius: 4px;
-  animation: core-glow 2s ease-in-out infinite alternate;
-}
-
-.chip-pins {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.pin {
-  position: absolute;
-  width: 3px;
-  height: 15px;
-  background: #ffd700;
-  box-shadow: 0 0 5px #ffd700;
-}
-
-.pin:nth-child(1) { top: -8px; left: 20px; }
-.pin:nth-child(2) { top: -8px; left: 40px; }
-.pin:nth-child(3) { top: -8px; left: 60px; }
-.pin:nth-child(4) { top: -8px; left: 80px; }
-.pin:nth-child(5) { bottom: -8px; left: 20px; }
-.pin:nth-child(6) { bottom: -8px; left: 40px; }
-.pin:nth-child(7) { bottom: -8px; left: 60px; }
-.pin:nth-child(8) { bottom: -8px; left: 80px; }
-
-/* Circuit Board Traces */
-.circuit-traces {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.trace {
-  position: absolute;
-  background: linear-gradient(90deg, transparent, #00d4ff, transparent);
-  box-shadow: 0 0 8px #00d4ff;
-  border-radius: 1px;
-}
-
-.trace-1 {
-  top: 15%;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  animation: trace-flow 4s linear infinite;
-}
-
-.trace-2 {
-  top: 35%;
-  left: 0;
-  width: 70%;
-  height: 2px;
-  animation: trace-flow 4s linear infinite 1s;
-}
-
-.trace-3 {
-  top: 55%;
-  right: 0;
-  width: 80%;
-  height: 2px;
-  animation: trace-flow-reverse 4s linear infinite 2s;
-}
-
-.trace-4 {
-  top: 75%;
-  left: 0;
-  width: 90%;
-  height: 2px;
-  animation: trace-flow 4s linear infinite 0.5s;
-}
-
-.trace-5 {
-  left: 20%;
-  top: 0;
-  width: 2px;
-  height: 100%;
-  animation: trace-flow-vertical 5s linear infinite;
-}
-
-.trace-6 {
-  right: 30%;
-  top: 0;
-  width: 2px;
-  height: 100%;
-  animation: trace-flow-vertical 5s linear infinite 2s;
-}
-
-/* Electronic Components */
-.components {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.resistor {
-  position: absolute;
-  width: 30px;
-  height: 8px;
-  background: linear-gradient(90deg, #8b4513, #daa520, #8b4513);
-  border-radius: 4px;
-  box-shadow: 0 0 10px rgba(218, 165, 32, 0.5);
-  animation: component-glow 3s ease-in-out infinite;
-}
-
-.resistor-1 {
-  top: 30%;
-  left: 18%;
-  animation-delay: 0s;
-}
-
-.resistor-2 {
-  bottom: 35%;
-  right: 25%;
-  animation-delay: 1.5s;
-}
-
-.capacitor {
-  position: absolute;
-  width: 12px;
-  height: 20px;
-  background: linear-gradient(180deg, #4169e1, #1e90ff);
-  border-radius: 2px;
-  box-shadow: 0 0 8px rgba(65, 105, 225, 0.6);
-  animation: component-glow 2.5s ease-in-out infinite;
-}
-
-.capacitor-1 {
-  top: 45%;
-  left: 28%;
-  animation-delay: 0.8s;
-}
-
-.capacitor-2 {
-  bottom: 28%;
-  left: 65%;
-  animation-delay: 2s;
-}
-
-.ic {
-  position: absolute;
-  width: 40px;
-  height: 20px;
-  background: linear-gradient(45deg, #2c3e50, #34495e);
-  border: 1px solid #00ff88;
-  border-radius: 3px;
-  box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
-  animation: ic-pulse 2s ease-in-out infinite;
-}
-
-.ic-1 {
-  top: 65%;
-  left: 12%;
-  animation-delay: 0s;
-}
-
-.ic-2 {
-  top: 25%;
-  right: 35%;
-  animation-delay: 1s;
-}
-
-/* Data Flow Animation */
-.data-flow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.data-line {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: #00ff88;
-  border-radius: 50%;
-  box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
-  animation: data-travel 6s linear infinite;
-}
-
-.data-line:nth-child(1) {
-  top: 15%;
-  left: 0;
-  animation-delay: 0s;
-}
-
-.data-line:nth-child(2) {
-  top: 35%;
-  left: 0;
-  animation-delay: 1.2s;
-}
-
-.data-line:nth-child(3) {
-  top: 55%;
-  right: 0;
-  animation-delay: 2.4s;
-}
-
-.data-line:nth-child(4) {
-  top: 75%;
-  left: 0;
-  animation-delay: 3.6s;
-}
-
-.data-line:nth-child(5) {
-  left: 20%;
-  top: 0;
-  animation-delay: 4.8s;
-}
-
-/* PCB Grid Background */
-.pcb-grid {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    linear-gradient(rgba(0, 255, 136, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 136, 0.1) 1px, transparent 1px),
-    radial-gradient(circle at 25% 25%, rgba(0, 212, 255, 0.1) 2px, transparent 2px),
-    radial-gradient(circle at 75% 75%, rgba(255, 107, 107, 0.1) 2px, transparent 2px);
-  background-size: 30px 30px, 30px 30px, 60px 60px, 60px 60px;
-  animation: pcb-scroll 15s linear infinite;
-  z-index: 0;
-}
-
 .hero-overlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.4);
   z-index: 2;
 }
 
@@ -580,35 +318,86 @@
 @media (max-width: 768px) {
   .hero {
     min-height: 100vh;
+    padding: 1rem 0;
   }
-  
+
+  .hero-content {
+    padding: 1rem;
+    max-width: 95%;
+  }
+
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
   }
-  
+
   .hero-subtitle {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    line-height: 1.4;
   }
-  
+
   .university-name {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    line-height: 1.3;
   }
-  
+
   .muet-box {
-    padding: 0.75rem 1.5rem;
+    padding: 0.6rem 1rem;
+    margin-bottom: 1.5rem;
   }
-  
+
   .hero-buttons {
     flex-direction: column;
     align-items: center;
+    gap: 0.8rem;
   }
-  
+
   .btn-primary, .btn-secondary {
-    width: 200px;
+    width: 180px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
   }
-  
+
+  .scroll-indicator {
+    bottom: 20px;
+    opacity: 0.8;
+  }
+
+  .scroll-indicator p {
+    font-size: 0.8rem;
+  }
+
   .particle {
     width: 4px;
     height: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 1.8rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .university-name {
+    font-size: 0.75rem;
+  }
+
+  .muet-box {
+    padding: 0.5rem 0.8rem;
+  }
+
+  .btn-primary, .btn-secondary {
+    width: 160px;
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .scroll-indicator {
+    bottom: 15px;
   }
 }

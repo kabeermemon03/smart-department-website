@@ -1,6 +1,9 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { isPlatformBrowser } from '@angular/common';
+import { collection, getDocs } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth, db } from '../../../services/firebase.service';
 
 interface Notice {
   id: string;
@@ -12,6 +15,9 @@ interface Notice {
   urgent: boolean;
   featured: boolean;
   downloadUrl?: string;
+  eventName?: string;
+  description?: string;
+  link?: string;
   details?: {
     venue?: string;
     time?: string;
@@ -31,101 +37,49 @@ export class NoticesComponent implements OnInit {
   filteredNotices: Notice[] = [];
   featuredNotice: Notice | null = null;
   selectedCategory: string = 'all';
+  userRole: 'teacher' | 'student' | null = null;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
-  // Sample data
-  sampleNotices: Notice[] = [
-    {
-      id: '1',
-      title: 'New Electronics Lab Equipment Installation',
-      excerpt: 'State-of-the-art equipment has been installed in the Electronics Lab to enhance practical learning experience.',
-      content: 'Full content here...',
-      category: 'news',
-      date: '2024-01-15',
-      urgent: false,
-      featured: true,
-      details: {
-        venue: 'Electronics Lab - Room 101'
-      }
-    },
-    {
-      id: '2',
-      title: 'Final Examination Schedule - Spring 2024',
-      excerpt: 'The final examination schedule for Spring 2024 semester has been announced. Please check your exam dates.',
-      content: 'Full content here...',
-      category: 'academic',
-      date: '2024-01-10',
-      urgent: true,
-      featured: false,
-      downloadUrl: '#',
-      details: {
-        deadline: '2024-02-15'
-      }
-    },
-    {
-      id: '3',
-      title: 'IEEE Student Chapter Workshop',
-      excerpt: 'Join us for an exciting workshop on "Future of Electronics Engineering" organized by IEEE Student Chapter.',
-      content: 'Full content here...',
-      category: 'events',
-      date: '2024-01-08',
-      urgent: false,
-      featured: false,
-      details: {
-        venue: 'Main Auditorium',
-        time: '2:00 PM - 5:00 PM'
-      }
-    },
-    {
-      id: '4',
-      title: 'Scholarship Applications Open',
-      excerpt: 'Merit-based scholarships are now available for outstanding students. Apply before the deadline.',
-      content: 'Full content here...',
-      category: 'announcements',
-      date: '2024-01-05',
-      urgent: true,
-      featured: false,
-      details: {
-        deadline: '2024-01-30'
-      }
-    },
-    {
-      id: '5',
-      title: 'Research Paper Publication Success',
-      excerpt: 'Our faculty members have published groundbreaking research in international journals.',
-      content: 'Full content here...',
-      category: 'news',
-      date: '2024-01-03',
-      urgent: false,
-      featured: false
-    },
-    {
-      id: '6',
-      title: 'Industrial Visit to Tech Company',
-      excerpt: 'Students will visit leading technology companies to gain practical industry exposure.',
-      content: 'Full content here...',
-      category: 'events',
-      date: '2024-01-01',
-      urgent: false,
-      featured: false,
-      details: {
-        venue: 'Tech Park, Karachi',
-        time: '9:00 AM - 4:00 PM'
-      }
-    }
-  ];
-
   ngOnInit() {
+    // Check authentication state
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // Determine role based on email
+        if (user.email === 'teacher@esmuet.edu.pk') {
+          this.userRole = 'teacher';
+        } else if (user.email === 'student@esmuet.edu.pk') {
+          this.userRole = 'student';
+        }
+      } else {
+        this.userRole = null;
+      }
+    });
+
     this.loadNotices();
     this.initializeTabs();
   }
 
-  loadNotices() {
-    this.notices = this.sampleNotices;
-    this.featuredNotice = this.notices.find(notice => notice.featured) || null;
-    this.filteredNotices = this.notices.filter(notice => !notice.featured);
-    this.sortNoticesByDate();
+  async loadNotices() {
+    try {
+      const noticesCollection = collection(db, 'notices');
+      const noticesSnapshot = await getDocs(noticesCollection);
+      const noticesData: Notice[] = noticesSnapshot.docs.map((doc: any) => ({
+        id: doc.id,
+        ...doc.data()
+      } as Notice));
+
+      this.notices = noticesData;
+      this.featuredNotice = this.notices.find(notice => notice.featured) || null;
+      this.filteredNotices = this.notices.filter(notice => !notice.featured);
+      this.sortNoticesByDate();
+    } catch (error) {
+      console.error('Error loading notices:', error);
+      // Fallback to empty array if Firebase fails
+      this.notices = [];
+      this.filteredNotices = [];
+      this.featuredNotice = null;
+    }
   }
 
   initializeTabs() {
@@ -185,9 +139,16 @@ export class NoticesComponent implements OnInit {
   }
 
   openNotice(notice: Notice) {
-    // In future, this will open a modal or navigate to detail page
-    console.log('Opening notice:', notice.title);
-    alert(`Opening: ${notice.title}\n\n${notice.content || notice.excerpt}`);
+    // Check if notice has a link and user is teacher, then open it
+    if (notice.link && this.userRole === 'teacher') {
+      window.open(notice.link, '_blank');
+    } else if (notice.link && this.userRole !== 'teacher') {
+      alert('This link is only accessible to teachers.');
+    } else {
+      // In future, this will open a modal or navigate to detail page
+      console.log('Opening notice:', notice.title);
+      alert(`Opening: ${notice.title}\n\n${notice.content || notice.excerpt}`);
+    }
   }
 
   downloadAttachment(notice: Notice) {

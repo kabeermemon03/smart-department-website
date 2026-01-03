@@ -11,6 +11,7 @@ import { filter } from 'rxjs/operators';
 })
 export class HeaderComponent implements OnInit {
   isScrolled = false;
+  isMobileMenuOpen = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -27,17 +28,18 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.onWindowScroll();
-      
-      // Scroll to top on route change
+
+      // Scroll to top on route change and close mobile menu
       this.router.events.pipe(
         filter(event => event instanceof NavigationEnd)
       ).subscribe(() => {
         window.scrollTo(0, 0);
+        this.isMobileMenuOpen = false; // Close mobile menu on navigation
       });
     }
   }
 
   toggleMobileMenu() {
-    // Mobile menu toggle logic
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 }

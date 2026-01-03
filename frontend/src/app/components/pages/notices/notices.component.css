@@ -1,12 +1,14 @@
 .notices-page {
   min-height: 100vh;
+  padding-top: 80px;
+  overflow-x: hidden;
 }
 
 /* Hero Section */
 .notices-hero {
   position: relative;
-  height: 50vh;
-  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  height: 60vh;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #8b5cf6 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -21,21 +23,21 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
   z-index: 2;
 }
 
 .hero-content {
   position: relative;
   z-index: 3;
-  max-width: 600px;
+  max-width: 800px;
   padding: 0 2rem;
 }
 
 .hero-content h1 {
-  font-size: 3rem;
+  font-size: 3.5rem;
   font-weight: 800;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
@@ -43,6 +45,7 @@
   font-size: 1.2rem;
   opacity: 0.9;
   font-weight: 400;
+  line-height: 1.6;
 }
 
 /* Filter Tabs */

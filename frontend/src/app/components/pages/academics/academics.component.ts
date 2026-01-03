@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-academics',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './academics.component.html',
   styleUrl: './academics.component.css'
 })

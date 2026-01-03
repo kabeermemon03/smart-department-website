@@ -1,0 +1,123 @@
+<div class="gpa-calculator">
+  <div class="container">
+    <div class="calculator-header">
+      <h1>GPA Calculator</h1>
+      <p>Calculate your Grade Point Average by adding your subjects and grades</p>
+    </div>
+
+    <form [formGroup]="gpaForm" class="calculator-form">
+      <div class="subjects-section">
+        <div class="section-header">
+          <h2>Subjects</h2>
+          <button type="button" class="add-subject-btn" (click)="addSubject()">
+            <span class="btn-icon">+</span>
+            Add Subject
+          </button>
+        </div>
+
+        <div class="subjects-list" formArrayName="subjects">
+          <div
+            class="subject-card"
+            *ngFor="let subject of subjects.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <div class="subject-header">
+              <h3>Subject {{ i + 1 }}</h3>
+              <button
+                type="button"
+                class="remove-btn"
+                (click)="removeSubject(i)"
+                [disabled]="subjects.length <= 1"
+                title="Remove subject"
+              >
+                ×
+              </button>
+            </div>
+
+            <div class="subject-fields">
+              <div class="field-group">
+                <label for="name-{{i}}">Subject Name</label>
+                <input
+                  type="text"
+                  id="name-{{i}}"
+                  formControlName="name"
+                  placeholder="e.g., Mathematics"
+                  (input)="onInputChange()"
+                >
+                <div class="error-message" *ngIf="subject.get('name')?.invalid && subject.get('name')?.touched">
+                  Subject name is required
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label for="creditHours-{{i}}">Credit Hours</label>
+                <input
+                  type="number"
+                  id="creditHours-{{i}}"
+                  formControlName="creditHours"
+                  min="0.5"
+                  max="6"
+                  step="0.5"
+                  (input)="onInputChange()"
+                >
+                <div class="error-message" *ngIf="subject.get('creditHours')?.invalid && subject.get('creditHours')?.touched">
+                  Credit hours must be between 0.5 and 6
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label for="grade-{{i}}">Grade</label>
+                <select
+                  id="grade-{{i}}"
+                  formControlName="grade"
+                  (change)="onInputChange()"
+                >
+                  <option *ngFor="let gradePoint of gradePoints" [value]="gradePoint.grade">
+                    {{ gradePoint.grade }} ({{ gradePoint.point }})
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions-section">
+        <button type="button" class="reset-btn" (click)="resetForm()">
+          <span class="btn-icon">↻</span>
+          Reset All
+        </button>
+      </div>
+    </form>
+
+    <div class="results-section" *ngIf="gpaResult">
+      <div class="results-card">
+        <h2>GPA Results</h2>
+        <div class="results-grid">
+          <div class="result-item">
+            <div class="result-label">GPA</div>
+            <div class="result-value gpa-value">{{ gpaResult.gpa | number:'1.2-2' }}</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Total Credit Hours</div>
+            <div class="result-value">{{ gpaResult.totalCreditHours }}</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Total Quality Points</div>
+            <div class="result-value">{{ gpaResult.totalQualityPoints | number:'1.2-2' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grade-scale-section">
+      <h3>Grade Scale Reference</h3>
+      <div class="grade-scale-grid">
+        <div class="grade-item" *ngFor="let gradePoint of gradePoints">
+          <span class="grade">{{ gradePoint.grade }}</span>
+          <span class="points">{{ gradePoint.point }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

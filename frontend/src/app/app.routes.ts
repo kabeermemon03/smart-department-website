@@ -10,5 +10,6 @@ export const routes: Routes = [
   { path: 'contact', loadComponent: () => import('./components/pages/contact/contact.component').then(m => m.ContactComponent) },
   { path: 'developers', loadComponent: () => import('./components/pages/developers/developers.component').then(m => m.DevelopersComponent) },
   { path: 'admin', loadComponent: () => import('./components/pages/admin/admin.component').then(m => m.AdminComponent) },
+  { path: 'gpa', loadComponent: () => import('./components/pages/gpa/gpa').then(m => m.GpaComponent) },
   { path: '**', loadComponent: () => import('./components/pages/not-found/not-found.component').then(m => m.NotFoundComponent) }
 ];

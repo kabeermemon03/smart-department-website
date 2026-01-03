@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ContactService } from '../../../services/contact.service';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../../../services/firebase.service';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-contact',
@@ -13,10 +15,11 @@ import { ContactService } from '../../../services/contact.service';
 export class ContactComponent {
   contactForm: FormGroup;
   submitting = false;
-  successMessage = '';
-  errorMessage = '';
 
-  constructor(private fb: FormBuilder, private contactService: ContactService) {
+  constructor(
+    private fb: FormBuilder,
+    private toastService: ToastService
+  ) {
     this.contactForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -25,24 +28,38 @@ export class ContactComponent {
     });
   }
 
-  submit() {
+  async submit() {
     if (this.contactForm.invalid) {
       this.contactForm.markAllAsTouched();
+      this.toastService.warning('Form Invalid', 'Please fill in all required fields correctly.');
       return;
     }
+
     this.submitting = true;
-    this.successMessage = '';
-    this.errorMessage = '';
-    this.contactService.sendMessage(this.contactForm.value).subscribe({
-      next: () => {
-        this.successMessage = 'Message sent (simulated). Backend not configured.';
-        this.contactForm.reset();
-        this.submitting = false;
-      },
-      error: () => {
-        this.errorMessage = 'Failed to send message. Backend not configured.';
-        this.submitting = false;
-      }
-    });
+
+    try {
+      const messageData = {
+        ...this.contactForm.value,
+        timestamp: new Date().toISOString(),
+        status: 'unread'
+      };
+
+      await addDoc(collection(db, 'contact-messages'), messageData);
+      
+      this.toastService.success(
+        'Message Sent Successfully!', 
+        'Thank you for contacting us. We will get back to you within 24 hours.'
+      );
+      
+      this.contactForm.reset();
+    } catch (error) {
+      console.error('Error sending message:', error);
+      this.toastService.error(
+        'Failed to Send Message', 
+        'There was an error sending your message. Please try again or contact us directly.'
+      );
+    } finally {
+      this.submitting = false;
+    }
   }
 }
