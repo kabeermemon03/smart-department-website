@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgForOf } from '@angular/common';
 import { HeroComponent } from '../../shared/hero/hero.component';
-import { CardComponent } from '../../shared/card/card.component';
 import { RouterLink } from '@angular/router';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '../../../services/firebase.service';
@@ -9,7 +8,7 @@ import { db } from '../../../services/firebase.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, NgForOf, HeroComponent, CardComponent, RouterLink],
+  imports: [CommonModule, NgForOf, HeroComponent, RouterLink],
   template: `
     <app-hero
       title="Welcome to Electronics Engineering Department"

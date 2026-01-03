@@ -1,5 +1,7 @@
 .faculty-page {
   min-height: 100vh;
+  padding-top: 80px;
+  overflow-x: hidden;
 }
 
 /* Hero Section */
@@ -55,8 +57,9 @@
 
 /* Faculty Stats */
 .faculty-stats {
-  padding: 4rem 0;
+  padding: 3rem 0;
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  margin-bottom: 2rem;
 }
 
 .container {
@@ -127,8 +130,9 @@
 
 .faculty-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  max-width: 100%;
 }
 
 /* Faculty Cards */
@@ -433,8 +437,12 @@
 /* Responsive Design */
 @media (max-width: 1024px) {
   .faculty-grid {
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .container {
+    padding: 0 1.5rem;
   }
 }
 
@@ -453,18 +461,38 @@
   
   .faculty-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .research-grid {
-    grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
   .card-body {
     padding: 1.5rem;
+  }
+  
+  .faculty-card {
+    margin-bottom: 1rem;
+  }
+  
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .faculty-card {
+    margin-bottom: 0.5rem;
   }
 }
 

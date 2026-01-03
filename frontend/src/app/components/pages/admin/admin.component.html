@@ -30,9 +30,8 @@
           </div>
           <button type="submit" class="login-btn">Login</button>
         </form>
-        <div class="demo-credentials">
-          <p><small>Teacher: <strong>teacher@esmuet.edu.pk</strong> (password: esmuet1972)</small></p>
-          <p><small>Student Admin: <strong>student@esmuet.edu.pk</strong> (password: newsadmin2024)</small></p>
+        <div class="demo-credentials" style="display: none;">
+          <!-- Credentials removed for production -->
         </div>
       </div>
     </div>
@@ -51,19 +50,68 @@
                 {{ isLoggedIn ? '✅ Signed In' : '❌ Not Signed In' }}
               </span>
             </div>
+            <div class="permissions-info">
+              <div class="permission-badge" *ngIf="canManageResults()">
+                <span class="badge-icon">📤</span>
+                <span>PDF Upload Access</span>
+              </div>
+              <div class="permission-badge" *ngIf="canManageNews()">
+                <span class="badge-icon">📰</span>
+                <span>News Management</span>
+              </div>
+            </div>
           </div>
-          <button (click)="logout()" class="logout-btn">Logout</button>
+          <div class="header-actions">
+            <button (click)="logout()" class="logout-btn">
+              <span class="btn-icon">🚪</span>
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="dashboard-content">
       <div class="container">
+        <!-- Quick Stats -->
+        <div class="stats-section">
+          <div class="stats-grid">
+            <div class="stat-card" *ngIf="canManageResults()">
+              <div class="stat-icon">📊</div>
+              <div class="stat-info">
+                <h3>{{ uploadedResults.length }}</h3>
+                <p>Uploaded Results</p>
+              </div>
+            </div>
+            <div class="stat-card" *ngIf="canManageNews()">
+              <div class="stat-icon">📰</div>
+              <div class="stat-info">
+                <h3>{{ notices.length }}</h3>
+                <p>Published News</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">👤</div>
+              <div class="stat-info">
+                <h3>{{ userRole === 'teacher' ? 'Teacher' : 'Student' }}</h3>
+                <p>Access Level</p>
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- Results Management (Teachers Only) -->
-        <div *ngIf="canManageResults()">
+        <div class="section-wrapper" *ngIf="canManageResults()">
+          <div class="section-header-banner">
+            <h2>📊 Teacher Dashboard - Results Management</h2>
+            <p>Upload and manage examination results for students</p>
+          </div>
+          
           <!-- Upload Section -->
           <div class="upload-section">
-            <h2>📤 Upload Result PDF</h2>
+            <div class="section-title">
+              <span class="title-icon">📤</span>
+              <h3>Upload Result PDF</h3>
+            </div>
             <form (ngSubmit)="uploadResult()" class="upload-form">
               <div class="form-row">
                 <div class="form-group">
@@ -102,20 +150,32 @@
               </div>
               <div class="form-group">
                 <label for="file">PDF File</label>
-                <input
-                  type="file"
-                  id="file"
-                  (change)="onFileSelect($event)"
-                  accept=".pdf"
-                  required>
+                <div class="file-upload-area">
+                  <input
+                    type="file"
+                    id="file"
+                    (change)="onFileSelect($event)"
+                    accept=".pdf"
+                    required>
+                  <div class="file-upload-text">
+                    <span class="upload-icon">📁</span>
+                    <span>Click to select PDF file or drag and drop</span>
+                  </div>
+                </div>
               </div>
-              <button type="submit" class="upload-btn">Upload Result</button>
+              <button type="submit" class="upload-btn">
+                <span class="btn-icon">⬆️</span>
+                <span>Upload Result</span>
+              </button>
             </form>
           </div>
 
           <!-- Uploaded Results Management -->
           <div class="results-management">
-            <h2>📋 Manage Uploaded Results</h2>
+            <div class="section-title">
+              <span class="title-icon">📋</span>
+              <h3>Manage Uploaded Results</h3>
+            </div>
             <div class="results-table" *ngIf="uploadedResults.length > 0; else noResults">
               <div class="table-header">
                 <div class="col">Title</div>
@@ -130,25 +190,36 @@
                 <div class="col">{{ result.course }}</div>
                 <div class="col">{{ result.uploadDate }}</div>
                 <div class="col">
-                  <button (click)="deleteResult(result.id)" class="delete-btn">🗑️ Delete</button>
+                  <button (click)="deleteResult(result.id)" class="delete-btn">
+                    <span>🗑️</span>
+                    <span>Delete</span>
+                  </button>
                 </div>
               </div>
             </div>
             <ng-template #noResults>
               <div class="no-results">
-                <p>No results uploaded yet.</p>
+                <div class="no-results-icon">📄</div>
+                <h4>No results uploaded yet</h4>
+                <p>Upload your first PDF result using the form above</p>
               </div>
             </ng-template>
           </div>
         </div>
 
         <!-- News Management (Teachers and Students) -->
-        <div *ngIf="canManageNews()" class="news-management">
-          <h2>📰 Manage News & Announcements</h2>
+        <div class="section-wrapper" *ngIf="canManageNews()">
+          <div class="section-header-banner">
+            <h2>📰 {{ userRole === 'teacher' ? 'Teacher' : 'Student' }} Dashboard - News Management</h2>
+            <p>Create and manage department news, announcements, and events</p>
+          </div>
 
           <!-- Add New Notice Form -->
           <div class="add-notice-section">
-            <h3>➕ Add New Notice</h3>
+            <div class="section-title">
+              <span class="title-icon">➕</span>
+              <h3>Add New Notice</h3>
+            </div>
             <form (ngSubmit)="addNotice()" class="notice-form">
               <div class="form-row">
                 <div class="form-group">
@@ -159,15 +230,15 @@
                     [(ngModel)]="noticeForm.title"
                     name="title"
                     required
-                    placeholder="Notice title">
+                    placeholder="Enter notice title">
                 </div>
                 <div class="form-group">
                   <label for="category">Category</label>
                   <select id="category" [(ngModel)]="noticeForm.category" name="category" required>
-                    <option value="news">News</option>
-                    <option value="announcements">Announcement</option>
-                    <option value="events">Event</option>
-                    <option value="academic">Academic</option>
+                    <option value="news">📰 News</option>
+                    <option value="announcements">📢 Announcement</option>
+                    <option value="events">🎉 Event</option>
+                    <option value="academic">🎓 Academic</option>
                   </select>
                 </div>
               </div>
@@ -178,17 +249,28 @@
                   [(ngModel)]="noticeForm.excerpt"
                   name="excerpt"
                   required
-                  placeholder="Brief description..."
+                  placeholder="Brief description (will be shown in preview)"
                   rows="3"></textarea>
               </div>
-              <div class="form-group">
-                <label for="eventName">Event Name</label>
-                <input
-                  type="text"
-                  id="eventName"
-                  [(ngModel)]="noticeForm.eventName"
-                  name="eventName"
-                  placeholder="Event name (optional)">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="eventName">Event Name (Optional)</label>
+                  <input
+                    type="text"
+                    id="eventName"
+                    [(ngModel)]="noticeForm.eventName"
+                    name="eventName"
+                    placeholder="Event name if applicable">
+                </div>
+                <div class="form-group">
+                  <label for="link">Link (Optional)</label>
+                  <input
+                    type="url"
+                    id="link"
+                    [(ngModel)]="noticeForm.link"
+                    name="link"
+                    placeholder="https://example.com">
+                </div>
               </div>
               <div class="form-group">
                 <label for="description">Description</label>
@@ -196,17 +278,8 @@
                   id="description"
                   [(ngModel)]="noticeForm.description"
                   name="description"
-                  placeholder="Detailed description..."
-                  rows="3"></textarea>
-              </div>
-              <div class="form-group">
-                <label for="link">Link</label>
-                <input
-                  type="url"
-                  id="link"
-                  [(ngModel)]="noticeForm.link"
-                  name="link"
-                  placeholder="https://example.com">
+                  placeholder="Detailed description of the notice"
+                  rows="4"></textarea>
               </div>
               <div class="form-group">
                 <label for="content">Full Content (Optional)</label>
@@ -214,30 +287,38 @@
                   id="content"
                   [(ngModel)]="noticeForm.content"
                   name="content"
-                  placeholder="Detailed content..."
-                  rows="5"></textarea>
+                  placeholder="Complete article content (for detailed news)"
+                  rows="6"></textarea>
               </div>
               <div class="form-row">
                 <div class="form-group checkbox-group">
                   <label class="checkbox-label">
                     <input type="checkbox" [(ngModel)]="noticeForm.urgent" name="urgent">
-                    <span>Urgent</span>
+                    <span class="checkmark"></span>
+                    <span>🔴 Mark as Urgent</span>
                   </label>
                 </div>
                 <div class="form-group checkbox-group">
                   <label class="checkbox-label">
                     <input type="checkbox" [(ngModel)]="noticeForm.featured" name="featured">
-                    <span>Featured</span>
+                    <span class="checkmark"></span>
+                    <span>⭐ Mark as Featured</span>
                   </label>
                 </div>
               </div>
-              <button type="submit" class="add-notice-btn">Add Notice</button>
+              <button type="submit" class="add-notice-btn">
+                <span class="btn-icon">📤</span>
+                <span>Publish Notice</span>
+              </button>
             </form>
           </div>
 
           <!-- Existing Notices Management -->
           <div class="notices-list">
-            <h3>📋 Existing Notices</h3>
+            <div class="section-title">
+              <span class="title-icon">📋</span>
+              <h3>Published Notices ({{ notices.length }})</h3>
+            </div>
             <div class="notices-table" *ngIf="notices.length > 0; else noNotices">
               <div class="table-header">
                 <div class="col">Title</div>
@@ -247,22 +328,36 @@
                 <div class="col">Actions</div>
               </div>
               <div class="table-row" *ngFor="let notice of notices">
-                <div class="col">{{ notice.title }}</div>
-                <div class="col">{{ notice.category }}</div>
+                <div class="col">
+                  <div class="notice-title">
+                    <span>{{ notice.title }}</span>
+                    <small>{{ notice.excerpt | slice:0:50 }}{{ notice.excerpt?.length > 50 ? '...' : '' }}</small>
+                  </div>
+                </div>
+                <div class="col">
+                  <span class="category-badge" [class]="notice.category">
+                    {{ getCategoryIcon(notice.category) }} {{ notice.category | titlecase }}
+                  </span>
+                </div>
                 <div class="col">{{ notice.date }}</div>
                 <div class="col">
                   <span class="status-badge" [class.urgent]="notice.urgent" [class.featured]="notice.featured">
-                    {{ notice.urgent ? 'Urgent' : notice.featured ? 'Featured' : 'Normal' }}
+                    {{ notice.urgent ? '🔴 Urgent' : notice.featured ? '⭐ Featured' : '🟢 Normal' }}
                   </span>
                 </div>
                 <div class="col">
-                  <button (click)="deleteNotice(notice.id)" class="delete-btn">🗑️ Delete</button>
+                  <button (click)="deleteNotice(notice.id)" class="delete-btn">
+                    <span>🗑️</span>
+                    <span>Delete</span>
+                  </button>
                 </div>
               </div>
             </div>
             <ng-template #noNotices>
               <div class="no-results">
-                <p>No notices created yet.</p>
+                <div class="no-results-icon">📰</div>
+                <h4>No notices published yet</h4>
+                <p>Create your first notice using the form above</p>
               </div>
             </ng-template>
           </div>

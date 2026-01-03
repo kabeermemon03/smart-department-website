@@ -2,9 +2,9 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
 import { auth, db } from '../../../services/firebase.service';
-import { environment } from '../../../environments/environment';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-admin',
@@ -16,19 +16,16 @@ export class AdminComponent implements OnInit {
   isLoggedIn = false;
   userRole: 'teacher' | 'student' | null = null;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private toastService: ToastService
+  ) {}
   loginForm = {
     username: '',
     password: ''
   };
 
-  // Teacher credentials
-  private readonly TEACHER_EMAIL = environment.adminCredentials.teacher.email;
-  private readonly TEACHER_PASSWORD = environment.adminCredentials.teacher.password;
 
-  // Student credentials
-  private readonly STUDENT_EMAIL = environment.adminCredentials.student.email;
-  private readonly STUDENT_PASSWORD = environment.adminCredentials.student.password;
   notices: any[] = [];
   noticeForm = {
     title: '',
@@ -59,16 +56,13 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     // Check if user is already logged in with Firebase Auth
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
         this.isLoggedIn = true;
-        // Determine role based on email
-        if (user.email === this.TEACHER_EMAIL) {
-          this.userRole = 'teacher';
-        } else if (user.email === this.STUDENT_EMAIL) {
-          this.userRole = 'student';
-        }
+        // Determine role based on Firestore users collection
+        await this.determineUserRole(user.uid);
         this.loadNotices();
+        this.loadResults(); // Load results when user is authenticated
       } else {
         this.isLoggedIn = false;
         this.userRole = null;
@@ -81,37 +75,37 @@ export class AdminComponent implements OnInit {
       // Use Firebase Auth to sign in with the provided credentials
       const userCredential = await signInWithEmailAndPassword(auth, this.loginForm.username, this.loginForm.password);
 
-      // Determine role based on email
-      let role: 'teacher' | 'student';
-      if (userCredential.user.email === this.TEACHER_EMAIL) {
-        role = 'teacher';
-      } else if (userCredential.user.email === this.STUDENT_EMAIL) {
-        role = 'student';
-      } else {
-        // If email doesn't match expected users, sign out and show error
+      // Determine role based on Firestore users collection
+      const role = await this.determineUserRole(userCredential.user.uid);
+
+      if (!role) {
+        // If user doesn't have admin role, sign out and show error
         await signOut(auth);
-        alert('Unauthorized user. Please use valid admin credentials.');
+        this.toastService.error('Access Denied', 'You do not have admin privileges for this system.');
         return;
       }
 
       this.isLoggedIn = true;
       this.userRole = role;
       this.loadNotices();
-      alert(`Login successful! Welcome ${role} admin.`);
+      this.toastService.success('Login Successful', `Welcome ${role} admin! You now have access to the dashboard.`);
     } catch (error: any) {
       console.error('Login error:', error);
-      let errorMessage = 'Login failed. Please check your credentials.';
+      let errorTitle = 'Login Failed';
+      let errorMessage = 'Please check your credentials and try again.';
 
       // Provide more specific error messages
       if (error.code === 'auth/user-not-found') {
-        errorMessage = 'User not found. Please check your email.';
+        errorMessage = 'No account found with this email address.';
       } else if (error.code === 'auth/wrong-password') {
         errorMessage = 'Incorrect password. Please try again.';
       } else if (error.code === 'auth/invalid-email') {
-        errorMessage = 'Invalid email format.';
+        errorMessage = 'Please enter a valid email address.';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many failed attempts. Please try again later.';
       }
 
-      alert(errorMessage);
+      this.toastService.error(errorTitle, errorMessage);
     }
   }
 
@@ -122,10 +116,10 @@ export class AdminComponent implements OnInit {
       this.userRole = null;
       this.loginForm = { username: '', password: '' };
       this.notices = [];
-      alert('Logged out successfully!');
+      this.toastService.success('Logged Out', 'You have been successfully logged out.');
     } catch (error) {
       console.error('Logout error:', error);
-      alert('Error logging out. Please try again.');
+      this.toastService.error('Logout Error', 'There was an issue logging out. Please try again.');
     }
   }
 
@@ -274,6 +268,65 @@ export class AdminComponent implements OnInit {
   saveToLocalStorage() {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('uploadedResults', JSON.stringify(this.uploadedResults));
+    }
+  }
+
+  getCategoryIcon(category: string): string {
+    switch(category) {
+      case 'news': return '📰';
+      case 'announcements': return '📢';
+      case 'events': return '🎉';
+      case 'academic': return '🎓';
+      default: return '📄';
+    }
+  }
+
+  // Determine user role from Firestore users collection
+  private async determineUserRole(uid: string): Promise<'teacher' | 'student' | null> {
+    try {
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('uid', '==', uid));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0];
+        const userData = userDoc.data();
+        return userData['role'] as 'teacher' | 'student';
+      }
+
+      // If user not found in Firestore, create default admin role based on email
+      const user = auth.currentUser;
+      if (user) {
+        let role: 'teacher' | 'student' = 'teacher'; // Default to teacher
+        
+        // Determine role based on email domain or specific emails
+        if (user.email?.includes('teacher') || user.email?.includes('admin') || user.email?.includes('faculty')) {
+          role = 'teacher';
+        } else if (user.email?.includes('student')) {
+          role = 'student';
+        }
+
+        // Create user document in Firestore
+        await addDoc(collection(db, 'users'), {
+          uid: uid,
+          email: user.email,
+          role: role,
+          createdAt: new Date().toISOString()
+        });
+
+        console.log(`Created user document with role: ${role}`);
+        return role;
+      }
+
+      return null;
+    } catch (error) {
+      console.error('Error determining user role:', error);
+      // Fallback: if there's an error, allow teacher access for admin emails
+      const user = auth.currentUser;
+      if (user?.email?.includes('admin') || user?.email?.includes('teacher') || user?.email?.includes('faculty')) {
+        return 'teacher';
+      }
+      return null;
     }
   }
 }
