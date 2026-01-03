@@ -47,11 +47,11 @@ The updated code now automatically creates user documents when you first login!
 
 ```
 Email: teacher@esmuet.edu.pk
-Password: esmuet1972
+Password: [YOUR_SECURE_PASSWORD]
 Role: Teacher (auto-assigned)
 
-Email: student@esmuet.edu.pk  
-Password: newsadmin2024
+Email: student@esmuet.edu.pk
+Password: [YOUR_SECURE_PASSWORD]
 Role: Student (auto-assigned)
 ```
 
