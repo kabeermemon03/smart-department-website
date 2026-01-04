@@ -1,18 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideZoneChangeDetection } from '@angular/core';
 
-import { Gpa } from './gpa';
+import { GpaComponent } from './gpa';
 
-describe('Gpa', () => {
-  let component: Gpa;
-  let fixture: ComponentFixture<Gpa>;
+describe('GpaComponent', () => {
+  let component: GpaComponent;
+  let fixture: ComponentFixture<GpaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Gpa]
+      imports: [GpaComponent],
+      providers: [provideZoneChangeDetection({ eventCoalescing: true })]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Gpa);
+    fixture = TestBed.createComponent(GpaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
