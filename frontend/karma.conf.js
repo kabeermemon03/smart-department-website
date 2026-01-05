@@ -52,8 +52,11 @@ module.exports = function (config) {
         flags: [
           '--no-sandbox',
           '--disable-gpu',
-          '--disable-dev-shm-usage'
-        ]
+          '--disable-dev-shm-usage',
+          '--remote-debugging-port=9222'
+        ],
+        // Force Karma to use Puppeteer Chrome
+        executablePath: require('puppeteer').executablePath()
       }
     }
   });
