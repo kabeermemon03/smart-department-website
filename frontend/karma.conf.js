@@ -32,8 +32,6 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome'],
-    singleRun: false,
     restartOnFileChange: true,
     
     customLaunchers: {
@@ -50,6 +48,10 @@ module.exports = function (config) {
           '--remote-debugging-port=9222'
         ]
       }
-    }
+    },
+    
+    // Override browsers when running in CI
+    browsers: process.env.CI ? ['ChromeHeadlessCI'] : ['Chrome'],
+    singleRun: !!process.env.CI
   });
 };
