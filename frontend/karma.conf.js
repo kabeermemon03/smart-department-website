@@ -1,13 +1,8 @@
 // Karma configuration file
-// https://karma-runner.github.io/1.0/config/configuration-file.html
-
 module.exports = function (config) {
-  const isCI = !!process.env.CI;
-
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
-
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
@@ -15,16 +10,15 @@ module.exports = function (config) {
       require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
-
     client: {
-      jasmine: {},
+      jasmine: {
+        random: false
+      },
       clearContext: false
     },
-
     jasmineHtmlReporter: {
       suppressAll: true
     },
-
     coverageReporter: {
       dir: require('path').join(__dirname, './coverage/frontend'),
       subdir: '.',
@@ -33,19 +27,15 @@ module.exports = function (config) {
         { type: 'text-summary' }
       ]
     },
-
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-
-    // 🔑 CI-safe settings
-    autoWatch: !isCI,
-    restartOnFileChange: !isCI,
-    singleRun: isCI,
-
-    browsers: isCI ? ['ChromeHeadlessCI'] : ['Chrome'],
-
+    autoWatch: true,
+    browsers: ['Chrome'],
+    singleRun: false,
+    restartOnFileChange: true,
+    
     customLaunchers: {
       ChromeHeadlessCI: {
         base: 'ChromeHeadless',
@@ -53,10 +43,9 @@ module.exports = function (config) {
           '--no-sandbox',
           '--disable-gpu',
           '--disable-dev-shm-usage',
+          '--disable-web-security',
           '--remote-debugging-port=9222'
-        ],
-        // Force Karma to use Puppeteer Chrome
-        executablePath: require('puppeteer').executablePath()
+        ]
       }
     }
   });

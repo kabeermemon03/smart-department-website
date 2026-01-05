@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "CI=true ng test --watch=false",
+    "test": "ng test",
+    "test:ci": "ng test --watch=false --browsers=ChromeHeadlessCI",
     "serve:ssr:frontend": "node dist/frontend/server/server.mjs"
   },
   "prettier": {
