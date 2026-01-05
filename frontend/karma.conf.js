@@ -50,7 +50,7 @@ module.exports = function (config) {
       }
     },
     
-    browsers: process.env.CI === 'true' ? ['ChromeHeadlessCI'] : ['Chrome'],
-    singleRun: process.env.CI === 'true'
+    browsers: ['ChromeHeadlessCI'],
+    singleRun: true
   });
 };
