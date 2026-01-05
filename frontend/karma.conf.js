@@ -44,6 +44,9 @@ module.exports = function (config) {
           '--disable-gpu',
           '--disable-dev-shm-usage',
           '--disable-web-security',
+          '--disable-extensions',
+          '--no-first-run',
+          '--disable-default-apps',
           '--remote-debugging-port=9222'
         ]
       }
