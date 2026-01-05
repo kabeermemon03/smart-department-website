@@ -50,8 +50,7 @@ module.exports = function (config) {
       }
     },
     
-    // Override browsers when running in CI
-    browsers: process.env.CI ? ['ChromeHeadlessCI'] : ['Chrome'],
-    singleRun: !!process.env.CI
+    browsers: ['ChromeHeadlessCI'],
+    singleRun: true
   });
 };
