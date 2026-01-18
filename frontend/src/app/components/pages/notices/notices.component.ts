@@ -146,14 +146,12 @@ export class NoticesComponent implements OnInit {
       alert('This link is only accessible to teachers.');
     } else {
       // In future, this will open a modal or navigate to detail page
-      console.log('Opening notice:', notice.title);
       alert(`Opening: ${notice.title}\n\n${notice.content || notice.excerpt}`);
     }
   }
 
   downloadAttachment(notice: Notice) {
     // In future, this will download the actual file
-    console.log('Downloading attachment for:', notice.title);
     alert(`Downloading attachment for: ${notice.title}`);
   }
 }

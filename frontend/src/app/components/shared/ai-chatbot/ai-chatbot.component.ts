@@ -202,10 +202,10 @@ export class AiChatbotComponent implements OnInit, AfterViewChecked {
         break;
       case 'download':
         // Handle file download
-        console.log('Downloading:', action.data);
         break;
       default:
-        console.log('Unknown action:', action);
+        // Handle unknown action
+        break;
     }
   }
 

@@ -3,7 +3,8 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
-import { auth, db } from '../../../services/firebase.service';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { auth, db, storage } from '../../../services/firebase.service';
 import { ToastService } from '../../../services/toast.service';
 
 @Component({
@@ -141,9 +142,50 @@ export class AdminComponent implements OnInit {
     }
   }
 
-  uploadResult() {
-    // TODO: Implement secure backend upload and storage (S3/Cloud Storage) with auth.
-    alert('Upload functionality not implemented yet.');
+  async uploadResult() {
+    if (!this.uploadForm.file || !this.uploadForm.semester || !this.uploadForm.course) {
+      this.toastService.error('Validation Error', 'Please select a PDF file, semester, and course.');
+      return;
+    }
+
+    try {
+      // Create a unique filename for the upload
+      const timestamp = new Date().getTime();
+      const fileName = `results/${this.uploadForm.semester}/${this.uploadForm.course}/${timestamp}-${this.uploadForm.file.name}`;
+      
+      // Upload file to Firebase Storage
+      const storageRef = ref(storage, fileName);
+      const snapshot = await uploadBytes(storageRef, this.uploadForm.file);
+      
+      // Get download URL
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      
+      // Create result object
+      const resultData = {
+        id: timestamp.toString(),
+        title: this.uploadForm.title || `${this.uploadForm.course} Results`,
+        semester: this.uploadForm.semester,
+        year: new Date().getFullYear().toString(),
+        type: 'final' as 'midterm' | 'final' | 'supplementary',
+        uploadDate: new Date().toISOString().split('T')[0],
+        fileName: this.uploadForm.file.name,
+        fileUrl: downloadURL,
+        storagePath: fileName
+      };
+
+      // Save result metadata to Firestore
+      await addDoc(collection(db, 'results'), resultData);
+      
+      // Update local list
+      this.uploadedResults.push(resultData);
+      this.saveToLocalStorage();
+      
+      this.resetUploadForm();
+      this.toastService.success('Upload Successful', 'Result PDF has been uploaded and is now available for download.');
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      this.toastService.error('Upload Failed', 'Failed to upload PDF. Please try again.');
+    }
   }
 
   deleteResult(id: number) {
@@ -314,7 +356,6 @@ export class AdminComponent implements OnInit {
           createdAt: new Date().toISOString()
         });
 
-        console.log(`Created user document with role: ${role}`);
         return role;
       }
 

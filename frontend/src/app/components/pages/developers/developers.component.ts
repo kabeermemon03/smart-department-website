@@ -10,30 +10,33 @@ import { CommonModule } from '@angular/common';
 export class DevelopersComponent {
   developers = [
     {
-      name: 'Ahmed Khan',
+      name: 'Muhammad Kabeer',
       role: 'Lead Developer',
-      email: 'ahmed.khan@muet.edu.pk',
-      phone: '+92 300 1234567',
-      skills: ['Angular', 'TypeScript', 'Node.js', 'System Architecture'],
-      image: 'assets/images/dev1.jpg',
+      email: 'mknadeem721@gmail.com',
+      phone: '+923141093137',
+      linkedin: 'https://www.linkedin.com/in/muhammad-kabeer-a788a534b/',
+      skills: ['Angular', 'TypeScript', 'Frontend Architecture', 'UI Development'],
+      image: 'assets/images/MuhammadKabeer.jpeg',
       color: '#3b82f6'
     },
     {
-      name: 'Sara Ali', 
-      role: 'Database Handler',
-      email: 'sara.ali@muet.edu.pk',
-      phone: '+92 300 2345678',
-      skills: ['MongoDB', 'PostgreSQL', 'Data Modeling', 'API Integration'],
-      image: 'assets/images/dev2.jpg',
+      name: 'Muhammad Usaid', 
+      role: 'Firebase Manager',
+      email: 'usaidshaikh505@gmail.com',
+      phone: '+923360553437',
+      linkedin: 'https://www.linkedin.com/in/muhammad-usaid-465120383/',
+      skills: ['Firebase', 'Cloud Database', 'Backend Integration', 'Data Management'],
+      image: 'assets/images/MuhammadUsaid.jpeg',
       color: '#8b5cf6'
     },
     {
-      name: 'Fatima Raza',
-      role: 'UI/UX Designer', 
-      email: 'fatima.raza@muet.edu.pk',
-      phone: '+92 300 3456789',
-      skills: ['Figma', 'Adobe XD', 'CSS Animations', 'Responsive Design'],
-      image: 'assets/images/dev3.jpg',
+      name: 'Azeem Jam Tamachi',
+      role: 'Full Stack Developer', 
+      email: 'azeemjam100@gmail.com',
+      phone: '+923033963612',
+      linkedin: 'https://www.linkedin.com/in/azeem-jam-tamachi-00237a335/',
+      skills: ['MERN Stack', 'System Design', 'API Development', 'DevOps'],
+      image: 'assets/images/AzeemJamTamachi.jpeg',
       color: '#ec4899'
     }
   ];
@@ -41,8 +44,8 @@ export class DevelopersComponent {
   getRoleIcon(role: string): string {
     switch(role) {
       case 'Lead Developer': return '👨‍💻';
-      case 'Database Handler': return '🗄️';
-      case 'UI/UX Designer': return '🎨';
+      case 'Firebase Manager': return '🔥';
+      case 'Full Stack Developer': return '🚀';
       default: return '💼';
     }
   }
@@ -53,5 +56,9 @@ export class DevelopersComponent {
 
   openPhone(phone: string) {
     window.open(`tel:${phone}`);
+  }
+
+  connectOnLinkedIn(linkedinUrl: string) {
+    window.open(linkedinUrl, '_blank', 'noopener,noreferrer');
   }
 }

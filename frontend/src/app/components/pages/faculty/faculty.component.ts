@@ -253,6 +253,6 @@ export class FacultyComponent implements OnInit {
   laboratories: Laboratory[] = [];
 
   openLabDetails(lab: Laboratory) {
-    console.log('Opening details for:', lab.name);
+    // Handle lab details opening
   }
 }
