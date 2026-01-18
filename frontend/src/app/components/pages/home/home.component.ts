@@ -94,12 +94,12 @@ import { db } from '../../../services/firebase.service';
             <h4>MIS MUET</h4>
             <p>Management System</p>
           </a>
-          <a href="#" class="service-link fee">
+          <a href="https://exam.muet.edu.pk/website/download-challan/" target="_blank" rel="noopener noreferrer" class="service-link fee">
             <div class="service-icon">💳</div>
             <h4>Generate Fee Challan</h4>
             <p>Payment Portal</p>
           </a>
-          <a href="#" class="service-link exam">
+          <a href="https://exam.muet.edu.pk/website/" target="_blank" rel="noopener noreferrer" class="service-link exam">
             <div class="service-icon">📝</div>
             <h4>Examination Department</h4>
             <p>Results & Schedules</p>
@@ -172,6 +172,15 @@ import { db } from '../../../services/firebase.service';
       background-position: center;
       background-repeat: no-repeat;
       background-attachment: fixed;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      :host {
+        background-attachment: scroll;
+        background-size: cover;
+        background-position: center;
+      }
     }
 
     .quick-links {

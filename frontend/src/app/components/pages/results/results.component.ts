@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../../services/firebase.service';
 
 interface ResultFile {
   id: string;
@@ -31,28 +33,7 @@ export class ResultsComponent implements OnInit {
   selectedType: string = 'all';
 
   // Sample static data (will be replaced with backend data)
-  staticResults: ResultFile[] = [
-    {
-      id: '1',
-      title: 'Final Examination Results - Fall 2023',
-      semester: '1',
-      year: '2023',
-      type: 'final',
-      uploadDate: '2023-12-15',
-      fileName: 'final_results_fall_2023.pdf',
-      fileUrl: '#'
-    },
-    {
-      id: '2',
-      title: 'Midterm Examination Results - Fall 2023',
-      semester: '1',
-      year: '2023',
-      type: 'midterm',
-      uploadDate: '2023-10-20',
-      fileName: 'midterm_results_fall_2023.pdf',
-      fileUrl: '#'
-    }
-  ];
+  staticResults: ResultFile[] = [];
 
   constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {}
 
@@ -61,20 +42,28 @@ export class ResultsComponent implements OnInit {
   }
 
   loadResults() {
-    // Load static results
-    this.results = [...this.staticResults];
-    
-    // Load uploaded results from localStorage (admin panel uploads) - only in browser
-    if (isPlatformBrowser(this.platformId)) {
-      const uploadedResults = localStorage.getItem('uploadedResults');
-      if (uploadedResults) {
-        const parsed = JSON.parse(uploadedResults);
-        this.results = [...this.results, ...parsed];
-      }
+    // Load results from Firestore
+    this.loadResultsFromFirestore();
+  }
+
+  async loadResultsFromFirestore() {
+    try {
+      const resultsCollection = collection(db, 'results');
+      const resultsSnapshot = await getDocs(resultsCollection);
+      const firebaseResults: ResultFile[] = resultsSnapshot.docs.map((doc: any) => ({
+        id: doc.id,
+        ...doc.data()
+      } as ResultFile));
+
+      this.results = firebaseResults;
+      this.filteredResults = this.results;
+      this.sortResultsByDate();
+    } catch (error) {
+      console.error('Error loading results from Firestore:', error);
+      // Fallback to empty array if Firestore fails
+      this.results = [];
+      this.filteredResults = [];
     }
-    
-    this.filteredResults = this.results;
-    this.sortResultsByDate();
   }
 
   filterResults() {
@@ -110,8 +99,17 @@ export class ResultsComponent implements OnInit {
   }
 
   downloadResult(result: ResultFile) {
-    // In future, this will download from backend
-    console.log('Downloading:', result.fileName);
+    // Download the PDF file from the URL stored in Firestore
+    if (result.fileUrl) {
+      const link = document.createElement('a');
+      link.href = result.fileUrl;
+      link.download = result.fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      console.error('No download URL available for this result');
+    }
   }
 
   getTypeLabel(type: string): string {
